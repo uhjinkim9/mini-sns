@@ -1,5 +1,5 @@
 /**
- *  express 앱 설정 모듈
+ * express 앱 설정 모듈
  */
 
 import express from "express";

@@ -1,7 +1,11 @@
-import logo from "./logo.svg";
-import "./App.css";
+import React, {useEffect, useState} from "react";
 
-import React, {useEffect} from "react";
+import "./assets/font/font-pretendard.css";
+import "./assets/css/layout.css";
+
+import GlobalStyles from "./assets/style/GlobalStyles";
+import SideBar from "./components/Sidebar";
+import NavBar from "./components/NavBar";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -16,23 +20,28 @@ function App() {
 		});
 	}
 
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
 	return (
-		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>
-					Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React
-				</a>
-			</header>
-		</div>
+		<>
+			<div className="flex h-screen bg-gray-100">
+				<GlobalStyles />
+
+				{/* Sidebar (모바일에서는 숨김) */}
+				<SideBar isOpen={isSidebarOpen} />
+
+				{/* Main Content Area */}
+				<div className="flex flex-col flex-1">
+					{/* Header */}
+					<NavBar
+						toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+					/>
+
+					{/* Main Content */}
+					<main className="p-6">📌 메인 컨텐츠 영역</main>
+				</div>
+			</div>
+		</>
 	);
 }
 

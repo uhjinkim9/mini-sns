@@ -1,6 +1,5 @@
 function getTestMethod(req, res) {
-	console.log("응답");
-	res.send("<h1>hello api</h1>");
+	console.log("요긴 서버야");
 }
 
 const testController = {getTestMethod};
