@@ -24,7 +24,10 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 	port: DB_PORT,
 	logging: console.log, // 디버깅용, 운영에서는 false
 	dialectOptions: {
-		connectTimeout: 60000, // 타임아웃 60초 설정
+		connectTimeout: 60000, // 연결될 때까지 60초 대기
+	},
+	define: {
+		underscored: true, // snake_case
 	},
 });
 

@@ -1,6 +1,15 @@
 /** @type {import('tailwindcss').Config} */
-export const content = ["./src/**/*.{js,jsx,ts,tsx}"];
-export const theme = {
-	extend: {},
+const config = {
+	content: ["./src/**/*.{js,jsx,ts,tsx}"],
+	theme: {
+		extend: {
+			colors: {
+				"ucube-navy": "#000828",
+				"ucube-orange": "#fe6900",
+			},
+		},
+	},
+	plugins: [],
 };
-export const plugins = [];
+
+export default config;

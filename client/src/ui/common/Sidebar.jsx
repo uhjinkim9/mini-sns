@@ -1,20 +1,14 @@
-import ucubeLogo from "../assets/img/ucube-logo.png";
+import ucubeLogoText from "../../assets/img/ucube-logo-text.png";
 
 export default function Sidebar({isOpen}) {
 	return (
 		<>
-			<aside
-				className={`flex flex-col w-64 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 ${
-					isOpen ? "block" : "hidden"
-				}`}
-			>
-				<a href="#">
-					<img
-						className="w-auto h-7 object-scale-down"
-						src={ucubeLogo}
-						alt=""
-					></img>
-				</a>
+			<aside className="flex flex-col w-64 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+				<div className="object-contain h-auto w-full max-w-52">
+					<a href="#">
+						<img src={ucubeLogoText} alt="Ucube Logo" />
+					</a>
+				</div>
 
 				<div className="flex flex-col justify-between flex-1 mt-6">
 					<nav className="-mx-3 space-y-3 ">
@@ -25,7 +19,7 @@ export default function Sidebar({isOpen}) {
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
-								viewBox="0 0 24 24"
+								viewBox="0 0 1000 1000"
 								strokeWidth="1.5"
 								stroke="currentColor"
 								className="w-5 h-5"
@@ -49,7 +43,7 @@ export default function Sidebar({isOpen}) {
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
-								viewBox="0 0 24 24"
+								viewBox="0 0 1000 1000"
 								strokeWidth="1.5"
 								stroke="currentColor"
 								className="w-5 h-5"
@@ -73,7 +67,7 @@ export default function Sidebar({isOpen}) {
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
-								viewBox="0 0 24 24"
+								viewBox="0 0 1000 1000"
 								strokeWidth="1.5"
 								stroke="currentColor"
 								className="w-5 h-5"
@@ -92,7 +86,7 @@ export default function Sidebar({isOpen}) {
 
 						<a
 							className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-							href
+							href="#"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

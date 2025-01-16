@@ -8,28 +8,31 @@ import http from "http";
 import app from "./app.js";
 import sequelize from "../database/database.js";
 
+// Models
+import User from "../model/user.js";
+
 const server = http.createServer(app);
 
 sequelize
-	// .sync({ force: true })
+	// .sync({force: true})
 	.sync()
-	//   .then(result => {
-	//     return User.findById(1);
-	//     // console.log(result);
-	//   })
-	//   .then(user => {
-	//     if (!user) {
-	//       return User.create({ name: 'Max', email: 'test@test.com' });
-	//     }
-	//     return user;
-	//   })
-	//   .then(user => {
-	//     // console.log(user);
-	//     return user.createCart();
-	//   })
+	.then((result) => {
+		return User.findByPk("admin");
+	})
+	.then((user) => {
+		if (!user) {
+			return User.create({
+				companyId: "1000",
+				userId: "admin",
+				userNm: "admin",
+				email: "ejkim@u-cube.com",
+			});
+		}
+		return user;
+	})
 	.then(() => {
-		server.listen(3001, () => {
-			console.log("the server is running on 3001");
+		server.listen(5002, () => {
+			console.log("the server is running on 5002");
 		});
 	})
 	.catch((err) => {
