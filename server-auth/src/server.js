@@ -17,7 +17,11 @@ sequelize
 	// .sync({force: true})
 	.sync()
 	.then((result) => {
-		return User.findByPk("admin");
+		return User.findOne({
+			where: {
+				userId: "admin",
+			},
+		});
 	})
 	.then((user) => {
 		if (!user) {
@@ -25,7 +29,7 @@ sequelize
 				companyId: "1000",
 				userId: "admin",
 				userNm: "admin",
-				email: "ejkim@u-cube.com",
+				email: "ejkim@u-cube.kr",
 			});
 		}
 		return user;
