@@ -4,7 +4,6 @@
 
 import express from "express";
 import bodyParser from "body-parser";
-import cors from "cors";
 import path from "path";
 import {fileURLToPath} from "url";
 
@@ -12,7 +11,7 @@ const app = express();
 
 // CORS 설정
 app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "http://localhost:5001");
+	res.header("Access-Control-Allow-Origin", "http://localhost:5001"); // 게이트웨이 주소 허용
 	res.header("Access-Control-Allow-Credentials", "true");
 	res.header(
 		"Access-Control-Allow-Headers",

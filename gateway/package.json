@@ -1,5 +1,5 @@
 {
-  "name": "gateway_mini-sns",
+  "name": "gateway",
   "description": "Express Gateway Instance Bootstraped from Command Line",
   "repository": {},
   "license": "UNLICENSED",
@@ -7,6 +7,6 @@
   "main": "server.js",
   "dependencies": {
     "express-gateway": "^1.16.11",
-    "gateway_mini-sns": "file:"
+    "gateway": "file:"
   }
 }

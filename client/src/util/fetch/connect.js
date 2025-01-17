@@ -6,7 +6,7 @@ import {SERVER_URL} from "../../util/context/config";
  * @param {json} param 전달 데이터
  * @return {json} 반환 데이터
  */
-export async function requestFetchPost(url, param) {
+async function requestFetchPost(url, param) {
 	const reqOpt = {
 		method: "POST",
 		// CORS 설정 시 필요(서버에서 credentials: true로 설정한 경우)
@@ -31,3 +31,6 @@ export async function requestFetchPost(url, param) {
 		console.error("Fetch 요청 에러:", err.message);
 	}
 }
+
+const connect = {requestFetchPost};
+export default connect;

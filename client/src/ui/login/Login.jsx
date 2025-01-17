@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from "react";
 
-import {requestFetchPost} from "../../util/fetch/connect";
+import connect from "../../util/fetch/connect";
 
 export default function Login() {
 	const refId = useRef();
@@ -10,12 +10,13 @@ export default function Login() {
 	function enterId(e) {
 		console.log(e);
 		console.log(refId.current.value);
-
 		const userId = refId.current.value;
+
+		const url = "/auth/login";
 		const param = {userId: userId};
-		requestFetchPost("/auth/login", param).then((res) =>
-			console.log("프론트에서의 응답: ", res)
-		);
+		connect
+			.requestFetchPost(url, param)
+			.then((res) => console.log("프론트에서의 응답: ", res));
 	}
 
 	useEffect(() => {

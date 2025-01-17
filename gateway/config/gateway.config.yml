@@ -1,15 +1,19 @@
 http:
-    port: 5000
+    port: 5001
 admin:
     port: 9876
     host: localhost
 apiEndpoints:
-    api:
-        host: localhost
-        paths: "/ip"
+    host: localhost
+    paths:
+        - /auth/*
+        - /board/*
 serviceEndpoints:
-    httpbin:
-        url: "https://httpbin.org"
+    auth:
+        url: "http://localhost:5002"
+    board:
+        url: "http://localhost:5003"
+
 policies:
     - basic-auth
     - cors
@@ -19,13 +23,5 @@ policies:
     - oauth2
     - proxy
     - rate-limit
+    - jwt
 pipelines:
-    - name: ej
-      apiEndpoints:
-          - api
-      policies:
-          - key-auth:
-          - proxy:
-                action:
-                    serviceEndpoint: httpbin
-                    changeOrigin: true
