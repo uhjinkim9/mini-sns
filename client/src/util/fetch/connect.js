@@ -1,4 +1,4 @@
-import {SERVER_URL} from "../../util/context/config";
+import {API_URL} from "../../util/context/config";
 
 /**
  * API를 사용해 서버와 통신하는 함수(POST)
@@ -18,9 +18,9 @@ async function requestFetchPost(url, param) {
 		body: JSON.stringify(param),
 	};
 	try {
-		console.log("Request URL:", `${SERVER_URL}${url}`);
+		console.log("Request URL:", `${API_URL}${url}`);
 		console.log("Request Options:", reqOpt);
-		const res = await fetch(`${SERVER_URL}${url}`, reqOpt);
+		const res = await fetch(`${API_URL}${url}`, reqOpt);
 		if (!res.ok) {
 			throw new Error(`HTTP error! status: ${res.status}`);
 		}

@@ -6,33 +6,22 @@
 import http from "http";
 
 import app from "./app.js";
-import sequelize from "../database/database.js";
+import sequelize from "./database/database.js";
 
 // Models
-import User from "../model/user.js";
+import User from "./model/user.js";
 
 const server = http.createServer(app);
 
 sequelize
-	// .sync({force: true})
+	// .sync({force: true}) // DB 초기화 시에만
 	.sync()
-	.then((result) => {
+	.then(() => {
 		return User.findOne({
 			where: {
 				userId: "admin",
 			},
 		});
-	})
-	.then((user) => {
-		if (!user) {
-			return User.create({
-				companyId: "1000",
-				userId: "admin",
-				userNm: "admin",
-				email: "ejkim@u-cube.kr",
-			});
-		}
-		return user;
 	})
 	.then(() => {
 		server.listen(5002, () => {

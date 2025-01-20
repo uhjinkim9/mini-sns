@@ -13,7 +13,7 @@ export function authMiddleware(req, res, next) {
 	}
 
 	try {
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
 		req.user = decoded; // 인증된 사용자 정보 추가
 		next();
 	} catch (err) {

@@ -21,7 +21,7 @@ const User = sequelize.define(
 			allowNull: false,
 			comment: "사용자 이름",
 		},
-		password: {
+		userPw: {
 			type: Sequelize.STRING(50),
 			defaultValue: null,
 			comment: "사용자 비밀번호",
