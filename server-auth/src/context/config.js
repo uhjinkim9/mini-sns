@@ -7,11 +7,11 @@ import rootDir from "../util/rootDir.js";
 dotenv.config();
 
 // 환경변수
-export const PORT = process.env.PORT;
-export const CLIENT_URL = process.env.CLIENT_URL;
-export const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL;
-export const BOARD_SERVICE_URL = process.env.BOARD_SERVICE_URL;
-export const CHAT_SERVICE_URL = process.env.CHAT_SERVICE_URL;
+export const DB_HOST = process.env.DB_HOST;
+export const DB_NAME = process.env.DB_NAME;
+export const DB_PORT = process.env.DB_PORT;
+export const DB_USER = process.env.DB_USER;
+export const DB_PASSWORD = process.env.DB_PASSWORD;
 
 // PEM 파일 읽기
 const privateKeyPath = path.resolve(
