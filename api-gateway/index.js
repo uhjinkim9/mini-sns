@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 import {
   PORT, // 5001
@@ -11,10 +12,11 @@ import { authMiddleware } from "./src/jwt/jwtAuthorizer.js";
 import proxyMiddleware from "./src/routes/apiRoutes.js";
 
 const app = express();
-
 // JSON 및 URL-encoded 파싱 미들웨어 추가
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 
 // app.use(bodyParser.json()); // JSON 요청 본문 파싱
 // app.use(bodyParser.urlencoded({ extended: true })); // URL-encoded 본문 파싱
