@@ -14,13 +14,16 @@ async function requestFetchPost(url, param) {
 		credentials: "include",
 		headers: {
 			"Content-Type": "application/json",
+			Authorization: "Bearer <your-token>",
 		},
 		body: JSON.stringify(param),
 	};
+	console.log(JSON.stringify(param));
 	try {
-		console.log("Request URL:", `${API_URL}${url}`);
+		console.log("Request URL:", `${API_URL}${url}`); // POST /api/auth/login
 		console.log("Request Options:", reqOpt);
 		const res = await fetch(`${API_URL}${url}`, reqOpt);
+		// const res = await fetch("http://localhost:5001/api/auth/login", reqOpt);
 		if (!res.ok) {
 			throw new Error(`HTTP error! status: ${res.status}`);
 		}

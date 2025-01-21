@@ -1,0 +1,40 @@
+http:
+    port: 5001 # 게이트웨이 실행 포트
+# admin:
+#   port: 9876
+#   host: localhost
+apiEndpoints:
+    api:
+        host: "*"
+        paths: "/api/auth/*"
+serviceEndpoints:
+    authService:
+        url: "http://localhost:5002" # AUTH 서비스 URL
+policies:
+    - cors
+    - log
+    - proxy
+    - proxy-with-body
+    - jwt
+    # - basic-auth
+    # - expression
+    # - key-auth
+    # - oauth2
+    # - rate-limit
+pipelines:
+    default:
+        apiEndpoints:
+            - auth
+        policies:
+            # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+            # - key-auth:
+            - jwtAuth:
+                  - action: jwtAuth
+            - jwt:
+                  - action:
+                        secretOrPublicKeyFile: ./keys/pubKey.pem
+                        checkCredentialExistence: false
+            - proxy:
+                  - action:
+                        serviceEndpoint: authService
+                        changeOrigin: true

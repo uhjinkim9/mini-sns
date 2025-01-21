@@ -20,10 +20,11 @@ export default function Login() {
 			return updatedLoginInfo;
 		});
 
-		const url = "/auth/login";
+		const url = "/api/auth/login";
 		try {
+			console.log("Sending request to:", url);
 			const res = await connect.requestFetchPost(url, updatedLoginInfo);
-			console.log("프론트에서의 응답: ", res);
+			console.log("Response received:", res);
 		} catch (err) {
 			console.log("에러: ", err);
 		}

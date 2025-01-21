@@ -13,14 +13,17 @@ export const DB_PORT = process.env.DB_PORT;
 export const DB_USER = process.env.DB_USER;
 export const DB_PASSWORD = process.env.DB_PASSWORD;
 
+export const CLIENT_URL = process.env.CLIENT_URL;
+export const GATEWAY_URL = process.env.CLIENT_URL;
+
 // PEM 파일 읽기
 const privateKeyPath = path.resolve(
-  rootDir,
-  path.join("../", "keys", "private.pem")
+	rootDir,
+	path.join("../", "keys", "private.pem")
 );
 const publicKeyPath = path.resolve(
-  rootDir,
-  path.join("../", "keys", "public.pem")
+	rootDir,
+	path.join("../", "keys", "public.pem")
 );
 
 const privateKey = fs.readFileSync(privateKeyPath, "utf8");
