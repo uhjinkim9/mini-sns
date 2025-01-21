@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 	console.log("백엔드 라우터 직전");
 	next();
 });
-app.use("/auth", loginRoutes);
+app.use("/api/auth", loginRoutes);
 // app.use(loginRoutes);
 
 export default app;

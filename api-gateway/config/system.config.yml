@@ -4,29 +4,31 @@ db:
         emulate: true
         namespace: EG
 
-#plugins:
+# plugins:
 # express-gateway-plugin-example:
 #   param1: 'param from system.config'
 
 middlewares:
     cors:
-        - action:
-              origin: "http://localhost:5000" # React 클라이언트 URL
-              credentials: true
-
-crypto:
-    cipherKey: sensitiveKey
-    algorithm: rsa256
-    saltRounds: 10
+        action:
+            origin: "http://localhost:5000" # React 클라이언트 URL
+            credentials: true
+# plugins:
+#     proxy-with-body:
+#         package: ../lib/plugins/proxy-with-body/index.js
+# crypto:
+#     cipherKey: sensitiveKey
+#     algorithm: rs256
+#     saltRounds: 10
 
 # OAuth2 Settings
-session:
-    secret: keyboard cat
-    resave: false
-    saveUninitialized: false
-accessTokens:
-    timeToExpiry: 7200000
-refreshTokens:
-    timeToExpiry: 7200000
-authorizationCodes:
-    timeToExpiry: 300000
+# session:
+#     secret: keyboard cat
+#     resave: false
+#     saveUninitialized: false
+# accessTokens:
+#     timeToExpiry: 7200000
+# refreshTokens:
+#     timeToExpiry: 7200000
+# authorizationCodes:
+#     timeToExpiry: 300000

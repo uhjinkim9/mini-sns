@@ -4,7 +4,7 @@ http:
 #   port: 9876
 #   host: localhost
 apiEndpoints:
-    api:
+    authApi:
         host: "*"
         paths: "/api/auth/*"
 serviceEndpoints:
@@ -14,27 +14,60 @@ policies:
     - cors
     - log
     - proxy
-    - proxy-with-body
     - jwt
+    # - proxy-with-body
+    # - jwtAuth
     # - basic-auth
     # - expression
     # - key-auth
     # - oauth2
     # - rate-limit
 pipelines:
-    default:
+    authPipeline:
         apiEndpoints:
-            - auth
+            - authApi
         policies:
             # Uncomment `key-auth:` when instructed to in the Getting Started guide.
             # - key-auth:
-            - jwtAuth:
-                  - action: jwtAuth
+            - cors: # 맨 위 배치
+                  - action:
+                        origin: "http://localhost:5000"
+                        credentials: true
+                        methods: "GET, POST, PUT, DELETE, OPTIONS"
+                        allowedHeaders:
+                            [
+                                "Authorization",
+                                "Content-type",
+                                "Origin",
+                                "Access-Control-Allow-Origin",
+                                "Access-Control-Allow-Methods",
+                                "Accept",
+                                "Options",
+                                "Access-Control-Request-Headers",
+                                "Access-Control-Request-Method",
+                            ]
+                        exposedHeaders:
+                            [
+                                "Authorization",
+                                "Content-type",
+                                "Origin",
+                                "Access-Control-Allow-Origin",
+                                "Access-Control-Allow-Methods",
+                                "Accept",
+                                "Options",
+                                "Access-Control-Request-Headers",
+                                "Access-Control-Request-Method",
+                            ]
+                        preflightContinue: false
+                        optionsSuccessStatus: 204
             - jwt:
                   - action:
-                        secretOrPublicKeyFile: ./keys/pubKey.pem
+                        secretOrPublicKeyFile: ../keys/public.pem # JWT 검증
                         checkCredentialExistence: false
             - proxy:
                   - action:
                         serviceEndpoint: authService
                         changeOrigin: true
+            # - proxy-with-body:
+            #       - action:
+            #             baseUrl: "http://localhost:5002"

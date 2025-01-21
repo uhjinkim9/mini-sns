@@ -14,14 +14,8 @@ export const BOARD_SERVICE_URL = process.env.BOARD_SERVICE_URL;
 export const CHAT_SERVICE_URL = process.env.CHAT_SERVICE_URL;
 
 // PEM 파일 읽기
-const privateKeyPath = path.resolve(
-  rootDir,
-  path.join("../", "keys", "private.pem")
-);
-const publicKeyPath = path.resolve(
-  rootDir,
-  path.join("../", "keys", "public.pem")
-);
+const privateKeyPath = path.resolve(rootDir, path.join("keys", "private.pem"));
+const publicKeyPath = path.resolve(rootDir, path.join("keys", "public.pem"));
 
 const privateKey = fs.readFileSync(privateKeyPath, "utf8");
 const publicKey = fs.readFileSync(publicKeyPath, "utf8");

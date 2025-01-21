@@ -1,14 +1,19 @@
 {
-  "name": "api-gateway",
-  "description": "Express Gateway Instance Bootstraped from Command Line",
-  "repository": {},
-  "license": "UNLICENSED",
-  "version": "1.0.0",
-  "main": "server.js",
-  "dependencies": {
-    "api-gateway": "file:",
-    "express-gateway": "^1.16.11",
-    "jsonwebtoken": "^9.0.2",
-    "nodemon": "^3.1.9"
-  }
+	"name": "api-gateway",
+	"description": "Express Gateway Instance Bootstraped from Command Line",
+	"repository": {},
+	"license": "UNLICENSED",
+	"version": "1.0.0",
+	"main": "server.js",
+	"dependencies": {
+		"api-gateway": "file:",
+		"express-gateway": "^1.16.11",
+		"express-gateway-plugin-jwt": "^1.1.1",
+		"http-proxy-middleware": "^3.0.3",
+		"jsonwebtoken": "^9.0.2",
+		"nodemon": "^3.1.9"
+	},
+	"scripts": {
+		"start": "npx nodemon server.js"
+	}
 }

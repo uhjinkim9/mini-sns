@@ -7,6 +7,7 @@ import {API_URL} from "../../util/context/config";
  * @return {json} 반환 데이터
  */
 async function requestFetchPost(url, param) {
+	const token = localStorage.getItem("token");
 	const reqOpt = {
 		method: "POST",
 		// CORS 설정 시 필요(서버에서 credentials: true로 설정한 경우)
@@ -14,7 +15,7 @@ async function requestFetchPost(url, param) {
 		credentials: "include",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: "Bearer <your-token>",
+			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(param),
 	};

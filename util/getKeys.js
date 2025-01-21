@@ -10,6 +10,9 @@ dotenv.config();
 const privateKeyPath = path.resolve(rootDir, path.join("keys", "private.pem"));
 const publicKeyPath = path.resolve(rootDir, path.join("keys", "public.pem"));
 
+console.log(privateKeyPath, " - privateKeyPath");
+console.log(publicKeyPath, " - publicKeyPath");
+
 const privateKey = fs.readFileSync(privateKeyPath, "utf8");
 const publicKey = fs.readFileSync(publicKeyPath, "utf8");
 
