@@ -4,9 +4,7 @@
 /client/node_modules
 /api-gateway/node_modules
 /server-auth/node_modules
-
-# 테스트
-/gateway/node_modules
+/server-board/node_modules
 
 # Ignore PEM keys
 *.pem

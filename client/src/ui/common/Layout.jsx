@@ -1,23 +1,12 @@
-import React, {useState} from "react";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import SideBar from "./Sidebar";
-import NavBar from "./NavBar";
+import PersistentDrawerRight from "./PersistentDrawerRight";
 
-export default function Layout({mainContent}) {
-	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-	return (
-		<>
-			<div className="flex h-screen bg-gray-100">
-				{/* 사이드바 */}
-				<SideBar isOpen={isSidebarOpen} />
-				<div className="flex flex-col flex-1">
-					{/* 헤더 */}
-					<NavBar />
-					{/* 메인 */}
-					{mainContent}
-				</div>
-			</div>
-		</>
-	);
+export default function Layout({ mainContent }) {
+  return (
+    <>
+      <PersistentDrawerRight mainContent={mainContent} />
+    </>
+  );
 }

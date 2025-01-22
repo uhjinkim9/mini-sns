@@ -5,6 +5,8 @@
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.0",
+		"@fontsource/roboto": "^5.1.1",
+		"@mui/icons-material": "^6.4.1",
 		"@mui/material": "^6.4.1",
 		"axios": "^1.7.9",
 		"client": "file:",
@@ -41,7 +43,6 @@
 		]
 	},
 	"devDependencies": {
-		"@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-		"tailwindcss": "^3.4.17"
+		"@babel/plugin-proposal-private-property-in-object": "^7.21.11"
 	}
 }
