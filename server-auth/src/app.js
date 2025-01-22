@@ -32,12 +32,6 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "public")));
 
 import loginRoutes from "./routes/loginRoutes.js";
-
-app.use((req, res, next) => {
-	console.log("백엔드 라우터 직전");
-	next();
-});
 app.use("/api/auth", loginRoutes);
-// app.use(loginRoutes);
 
 export default app;

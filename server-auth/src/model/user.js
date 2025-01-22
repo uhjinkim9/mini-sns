@@ -1,4 +1,4 @@
-import Sequelize from "sequelize"; // 라이브러리
+import Sequelize, { DataTypes } from "sequelize"; // 라이브러리
 import sequelize from "../database/database.js"; // DB 연결
 
 const User = sequelize.define(
@@ -91,6 +91,7 @@ const User = sequelize.define(
 	},
 	{
 		comment: "그룹웨어 사용자",
+		timezone: "+09:00", // 한국 시간대 설정
 	}
 );
 

@@ -4,31 +4,77 @@ http:
 #   port: 9876
 #   host: localhost
 apiEndpoints:
+    loginApi:
+        host: "*"
+        paths: "/api/auth/login"
     authApi:
         host: "*"
         paths: "/api/auth/*"
 serviceEndpoints:
+    loginService:
+        url: "http://localhost:5002" # LOGIN 서비스 URL
     authService:
         url: "http://localhost:5002" # AUTH 서비스 URL
+
 policies:
     - cors
     - log
-    - proxy
     - jwt
-    # - proxy-with-body
-    # - jwtAuth
+    - proxy
     # - basic-auth
     # - expression
     # - key-auth
     # - oauth2
     # - rate-limit
+
 pipelines:
+    loginPipeline:
+        apiEndpoints:
+            - loginApi
+        policies:
+            - log:
+                  - action:
+                        message: "Login request received"
+            - cors: # 맨 위 배치
+                  - action:
+                        origin: "http://localhost:5000"
+                        credentials: true
+                        methods: "GET, POST, PUT, DELETE, OPTIONS"
+                        allowedHeaders:
+                            [
+                                "Authorization",
+                                "Content-type",
+                                "Origin",
+                                "Access-Control-Allow-Origin",
+                                "Access-Control-Allow-Methods",
+                                "Accept",
+                                "Options",
+                                "Access-Control-Request-Headers",
+                                "Access-Control-Request-Method",
+                            ]
+                        exposedHeaders:
+                            [
+                                "Authorization",
+                                "Content-type",
+                                "Origin",
+                                "Access-Control-Allow-Origin",
+                                "Access-Control-Allow-Methods",
+                                "Accept",
+                                "Options",
+                                "Access-Control-Request-Headers",
+                                "Access-Control-Request-Method",
+                            ]
+                        preflightContinue: false
+                        optionsSuccessStatus: 204
+            - proxy:
+                  - action:
+                        serviceEndpoint: loginService
+                        changeOrigin: true
+        
     authPipeline:
         apiEndpoints:
             - authApi
         policies:
-            # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-            # - key-auth:
             - cors: # 맨 위 배치
                   - action:
                         origin: "http://localhost:5000"
@@ -63,11 +109,9 @@ pipelines:
             - jwt:
                   - action:
                         secretOrPublicKeyFile: ../keys/public.pem # JWT 검증
+                        allowMissing: true
                         checkCredentialExistence: false
             - proxy:
                   - action:
                         serviceEndpoint: authService
                         changeOrigin: true
-            # - proxy-with-body:
-            #       - action:
-            #             baseUrl: "http://localhost:5002"

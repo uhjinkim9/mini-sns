@@ -1,20 +1,21 @@
 import React, {useRef, useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom"
 
-import connect from "../../util/fetch/connect";
+import connect from "../../util/fetch/connect.js";
+import checkStatus from "../../util/tools/checkStatus.js";
 
 export default function Login() {
 	const refId = useRef();
 	const refPw = useRef();
 
+	const navigate = useNavigate();
+
 	const [loginInfo, setLoginInfo] = useState();
 
 	async function enterId(e) {
-		let userId = refId.current.value;
-		let userPw = refPw.current.value;
-
 		const updatedLoginInfo = {
-			userId: userId,
-			userPw: userPw,
+			userId: refId.current.value,
+			userPw: refPw.current.value,
 		};
 		setLoginInfo(() => {
 			return updatedLoginInfo;
@@ -22,11 +23,14 @@ export default function Login() {
 
 		const url = "/api/auth/login";
 		try {
-			console.log("Sending request to:", url);
 			const res = await connect.requestFetchPost(url, updatedLoginInfo);
-			console.log("Response received:", res);
+			const data = await res.json(); // JSON 파싱
+			const token = await data.data.token;
+			window.sessionStorage.setItem("token", token);
+			if (res && res.status) navigate('/main');
+			
 		} catch (err) {
-			console.log("에러: ", err);
+			console.log("Error: ", err);
 		}
 	}
 

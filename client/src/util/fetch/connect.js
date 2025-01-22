@@ -7,30 +7,26 @@ import {API_URL} from "../../util/context/config";
  * @return {json} 반환 데이터
  */
 async function requestFetchPost(url, param) {
-	const token = localStorage.getItem("token");
+	// const token = localStorage.getItem("token");
 	const reqOpt = {
 		method: "POST",
 		// CORS 설정 시 필요(서버에서 credentials: true로 설정한 경우)
-		// 통신 시 쿠키 등 인증 값 포함
-		credentials: "include",
+		credentials: "include", // 통신 시 쿠키 등 인증 값 포함
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+			// Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(param),
 	};
 	console.log(JSON.stringify(param));
 	try {
-		console.log("Request URL:", `${API_URL}${url}`); // POST /api/auth/login
-		console.log("Request Options:", reqOpt);
 		const res = await fetch(`${API_URL}${url}`, reqOpt);
-		// const res = await fetch("http://localhost:5001/api/auth/login", reqOpt);
 		if (!res.ok) {
 			throw new Error(`HTTP error! status: ${res.status}`);
 		}
-		const data = await res.json(); // JSON 파싱
-		console.log("응답 데이터:", data); // 서버 응답 데이터
-		return data;
+		// const data = await res.json(); // JSON 파싱
+		// console.log("서버 응답 데이터:", data); // 서버 응답 데이터
+		return res;
 	} catch (err) {
 		console.error("Fetch 요청 에러:", err.message);
 	}

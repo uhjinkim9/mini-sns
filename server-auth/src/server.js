@@ -14,7 +14,15 @@ import User from "./model/user.js";
 const server = http.createServer(app);
 
 sequelize
-	// .sync({force: true}) // DB 초기화 시에만
+	// .sync({force: true})
+	// .then(() => {
+	// 	return User.create({
+	// 		companyId: 1000,
+	// 		userId: "admin",
+	// 		userNm: 'admin',
+	// 		userPw: '1234',
+	// 	});
+	// }) // WARNING: DB Reset
 	.sync()
 	.then(() => {
 		return User.findOne({
