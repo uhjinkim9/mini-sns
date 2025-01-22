@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start:all": "concurrently \"cd client && npm start\" \"cd api-gateway && npm start\" \"cd server-auth && npm start\" \"cd server-board && npm start\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
