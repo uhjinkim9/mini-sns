@@ -15,25 +15,27 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"snp_requestFetchPost": {
+"snp_requestFetch_Post": {
 		"prefix": "fetch",
 		"body": [
-			"const url = \"API URL\";",
-			"const param = \"OBJECT HERE\";",
-			"",
-			"try {",
-			"    const res = await connect.requestFetchPost(url, param);",
-			"    if (res.status >= 200 && res.status < 300) {",
-			"        // 성공 콜백",
-			"        console.log(\"Response received:\", res);",
-			"    } else {",
-			"        // 실패",
-			"        console.log(\"Failed response:\", res);",
+			"async function snp_FetchFunc() {",
+			"    const url = \"/api/path\";",
+			"    const param = { key: \"value\" };",
+			"    try {",
+			"        const res = await connect.requestFetch(url, param); // 응답",
+			"        const statCd = res.status;",
+			"        if (res && statCd === 200) { // 응답 성공",
+			"            console.log(\"Response received: \", res.data);",
+			"        } else if (statCd === 401) { // 응답 실패",
+			"            console.log(\"Failed response: \", res.data);",
+			"        } else {",
+			"            console.log(\"Unexpected response status: \", statCd);",
+			"        }",
+			"    } catch (err) { // 서버 에러",
+			"        console.log(\"Error: \", err);",
 			"    }",
-			"} catch (err) {",
-			"    console.log(\"Error: \", err);",
 			"}"
 		],
-		"description": "snp_requestFetchPost"
+		"description": "snp_requestFetch_Post"
 	}
 }

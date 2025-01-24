@@ -31,7 +31,7 @@ const __dirname = path.dirname(__filename);
 // 정적 파일 제공
 app.use(express.static(path.join(__dirname, "public")));
 
-import loginRoutes from "./routes/loginRoutes.js";
-app.use("/api/auth", loginRoutes);
+import pageRoutes from "./routes/pageRoutes.js";
+app.use("/api/board", pageRoutes);
 
 export default app;

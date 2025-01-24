@@ -9,31 +9,19 @@ import app from "./app.js";
 import sequelize from "./database/database.js";
 
 // Models
-import User from "./model/user.js";
+import Page from "./model/page.js";
 
 const server = http.createServer(app);
 
 sequelize
-	// .sync({force: true})
-	// .then(() => {
-	// 	return User.create({
-	// 		companyId: 1000,
-	// 		userId: "admin",
-	// 		userNm: 'admin',
-	// 		userPw: '1234',
-	// 	});
-	// }) // WARNING: DB Reset
+	// .sync({force: true}) // WARNING: DB Reset
 	.sync()
 	.then(() => {
-		return User.findOne({
-			where: {
-				userId: "admin",
-			},
-		});
+		return Page.findAll();
 	})
 	.then(() => {
-		server.listen(5002, () => {
-			console.log("the server is running on 5002");
+		server.listen(5003, () => {
+			console.log("the server is running on 5003");
 		});
 	})
 	.catch((err) => {

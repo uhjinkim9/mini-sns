@@ -4,6 +4,8 @@ import User from "../model/user.js";
 import UserToken from "../model/userToken.js";
 import {JWT_PRIVATE_KEY} from "../context/config.js";
 import checkStatus from "../../../util/checkStatus.js";
+import authService from "../service/authService.js";
+
 // import {Password} from "../util/password.js";
 
 async function postLogin(req, res, next) {
@@ -13,12 +15,7 @@ async function postLogin(req, res, next) {
 			return res.status(404).json({message: "ID or PW is empty"});
 		}
 
-		const existingUser = await User.findOne({
-			where: {
-				userId: userId,
-				userPw: userPw, // 해시 함수 추가 시 지움
-			},
-		});
+		const existingUser = await authService.findUser(userId, userPw);
 		// 비밀번호 해시/비교
 		// const pwMatch = await Password.compare(existingUser.userPw, userPw);
 		// if (!pwMatch) {
@@ -39,11 +36,9 @@ async function postLogin(req, res, next) {
 		);
 
 		return res.status(200).json({
-			data: {
-				user: existingUser,
-				token: token,
-				refreshToken: refreshToken,
-			},
+			user: existingUser,
+			token: token,
+			refreshToken: refreshToken,
 		});
 	} catch (err) {
 		console.error("Error in postLogin:", err);
@@ -110,5 +105,17 @@ function generateJwt(userInfo, expiresIn) {
 	return jwt.sign(payload, secret, options);
 }
 
-const loginController = {postLogin, issueToken};
-export default loginController;
+/**
+ * Get the refresh token info
+ * @param {string} tokenStr 토큰 문자열
+ * @return {string} 토큰 정보
+ */
+async function renewAccessToken(req, res, next) {
+	const {token} = req.body;
+	console.log(token);
+
+	const existingToken = await authService.findToken(token);
+}
+
+const authController = {postLogin, issueToken, renewAccessToken};
+export default authController;

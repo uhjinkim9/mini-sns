@@ -1,4 +1,4 @@
-function isNotEmpty(thing) {
+export function isNotEmpty(thing) {
 	if (thing !== null && thing !== undefined) {
 		if (Array.isArray(thing)) return thing.length > 0;
 		if (typeof thing === "string") return thing.trim().length > 0;
@@ -8,11 +8,10 @@ function isNotEmpty(thing) {
 	return false;
 }
 
-function isEmpty(thing) {
+export function isEmpty(thing) {
 	return !isNotEmpty(thing);
 }
 
-module.exports = {
-	isNotEmpty,
-	isEmpty,
-};
+
+const checkStatus = {isNotEmpty, isEmpty}
+export default checkStatus;

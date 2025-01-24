@@ -1,8 +1,12 @@
 {
   "scripts": {
-    "start:all": "concurrently \"cd client && npm start\" \"cd api-gateway && npm start\" \"cd server-auth && npm start\" \"cd server-board && npm start\""
+    "start:all": "concurrently \"cd client && npm start\" \"cd api-gateway && npm start\" \"cd server-auth && npm start\" \"cd server-board && npm start\"",
+    "start:front": "cd client && npm start",
+    "start:back": "concurrently \"cd api-gateway && npm start\" \"cd server-auth && npm start\" \"cd server-board && npm start\"",
+    "start:back-stable": "concurrently \"cd api-gateway && npm start\" \"cd server-auth && npm start\""
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
-  }
+  },
+  "type": "module"
 }
