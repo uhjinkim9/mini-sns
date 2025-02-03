@@ -1,11 +1,9 @@
-import React, {useState, Suspense, lazy} from "react";
-import {Routes, Route, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
 
 import {useTheme} from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import Progress from "../components/feedback/CircularProgress";
 import style from "./style/DrawerStyle";
 import TokenRefresher from "../components/functional/TokenRefresher";
 import Header from "./Header";

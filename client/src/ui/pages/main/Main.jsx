@@ -7,6 +7,7 @@ export default function Main() {
 	const title = "EJ";
 	const subTitle = "사원";
 	const content = "오늘의 기분";
+	console.log("메인 옴");
 
 	return (
 		<>

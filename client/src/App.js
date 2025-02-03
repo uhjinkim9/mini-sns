@@ -9,7 +9,6 @@ import "@fontsource/roboto/700.css";
 import Progress from "./ui/components/feedback/CircularProgress";
 
 import Frame from "./ui/layout/Frame";
-import Main from "./ui/pages/main/Main";
 import Login from "./ui/pages/main/Login";
 
 function App() {
@@ -20,12 +19,10 @@ function App() {
 					<Routes>
 						<Route path="/" exact element={<Login />} />
 						<Route
-							path="/main/Main"
-							exact
+							path="/*"
 							element={
 								<>
 									<Frame />
-									<Main />
 								</>
 							}
 						/>
