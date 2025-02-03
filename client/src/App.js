@@ -9,8 +9,8 @@ import "@fontsource/roboto/700.css";
 import Progress from "./ui/components/feedback/CircularProgress";
 
 import Frame from "./ui/layout/Frame";
+import Main from "./ui/pages/main/Main";
 import Login from "./ui/pages/main/Login";
-import Board from "./ui/pages/board/Board";
 
 function App() {
 	return (
@@ -18,13 +18,16 @@ function App() {
 			<BrowserRouter>
 				<Suspense fallback={<Progress></Progress>}>
 					<Routes>
-						{/* 추후 DB로 관리 */}
 						<Route path="/" exact element={<Login />} />
-						<Route path="/main" exact element={<Frame />} />
 						<Route
-							path="/board/boardAll"
+							path="/main/Main"
 							exact
-							element={<Board />}
+							element={
+								<>
+									<Frame />
+									<Main />
+								</>
+							}
 						/>
 					</Routes>
 				</Suspense>
