@@ -1,9 +1,13 @@
 import express from "express";
 
-import pageController from "../controller/pageController.js";
+import boardController from "../controller/boardController.js";
 
 const router = express.Router();
 
-router.post("/getPages", pageController.getPages);
+router.post("/getPages", boardController.getPages);
+router.post("/createContent", boardController.createContent);
+router.post("/updateContent", boardController.updateContent);
+router.post("/deleteContent", boardController.deleteContent);
+router.post("/getContents", boardController.getContents);
 
 export default router;

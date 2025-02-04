@@ -10,7 +10,6 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
 import connect from "../../../util/fetch/connect.js";
-// import checkStatus from "../../../util/tools/checkStatus.js";
 
 export default function Login() {
 	const navigate = useNavigate();
@@ -57,8 +56,7 @@ export default function Login() {
 		window.localStorage.setItem("companyId", companyId);
 	}
 
-	//서버와 로컬PC의 시간 차이값으로 서버시간 계산
-	// token 만료가 1분 이상 남았을 때 Main으로 이동
+	// 로그인 페이지로 왔지만 token 만료가 1분 이상 남았을 때 Main으로 이동
 
 	return (
 		<>

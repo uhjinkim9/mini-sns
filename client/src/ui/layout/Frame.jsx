@@ -37,6 +37,7 @@ export default function Frame() {
 	}, [location]);
 
 	function getPageCompo(pathName) {
+		// lazy 함수는 동적으로 import된 모듈을 받아서 React 컴포넌트로 변환하는 역할
 		const LazyComponent = lazy(() =>
 			import(`../pages${pathName}.jsx`).then((module) => {
 				if (!module.default) {

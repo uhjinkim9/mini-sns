@@ -3,7 +3,24 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 
-export default function VariantButtonGroup() {
+export default function TwoButtonGroup(props) {
+	const {
+		onClickButtonOne: onClickButtonOne,
+		onClickButtonTwo: onClickButtonTwo,
+		textButtonOne: textButtonOne,
+		textButtonTwo: textButtonTwo,
+		size: size,
+		activeButton: activeButton,
+	} = props;
+
+	const handleClickButtonOne = () => {
+		onClickButtonOne();
+	};
+
+	const handleClickButtonTwo = () => {
+		onClickButtonTwo();
+	};
+
 	return (
 		<Box
 			sx={{
@@ -18,9 +35,20 @@ export default function VariantButtonGroup() {
 			<ButtonGroup
 				variant="outlined" // text
 				aria-label="Basic button group"
+				size={size}
 			>
-				<Button>저장</Button>
-				<Button>초기화</Button>
+				<Button
+					variant={activeButton === 1 ? "contained" : "outlined"}
+					onClick={handleClickButtonOne}
+				>
+					{textButtonOne}
+				</Button>
+				<Button
+					variant={activeButton === 2 ? "contained" : "outlined"}
+					onClick={handleClickButtonTwo}
+				>
+					{textButtonTwo}
+				</Button>
 			</ButtonGroup>
 		</Box>
 	);
