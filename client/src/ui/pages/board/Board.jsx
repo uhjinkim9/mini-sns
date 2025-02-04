@@ -8,10 +8,11 @@ import {styled} from "@mui/material/styles";
 
 import MultilineTextFields from "../../components/inputs/MultilineTextFields";
 import ButtonGroup from "../../components/inputs/ButtonGroup";
-import Card from "../../components/surfaces/Card";
+import {useAlert} from "../../components/feedback/AlertProvider.jsx";
 
 import connect from "../../../util/fetch/connect.js";
 import useIsMounted from "../../../util/hook/useIsMounted.js";
+import checkStatus from "../../../util/tools/checkStatus.js";
 
 const Item = styled(Paper)(({theme}) => ({
 	backgroundColor: "#fff",
@@ -28,6 +29,7 @@ export default function Board() {
 	const contentRef = useRef();
 	const contentEditRef = useRef();
 	const isMounted = useIsMounted();
+	const {showAlert} = useAlert();
 
 	const userId = localStorage.getItem("userId");
 	const [conts, setConts] = useState([]);
@@ -46,6 +48,11 @@ export default function Board() {
 			content = contentRef.current.value;
 			url = "/api/board/createContent";
 			param = {...param, boardContent: content};
+		}
+
+		if (checkStatus.isEmpty(content)) {
+			showAlert("warning", "Please enter the text.");
+			return;
 		}
 
 		try {
@@ -139,7 +146,9 @@ export default function Board() {
 	}
 
 	useEffect(() => {
+		// if (isMounted) {
 		getBoardContents();
+		// }
 	}, [isMounted]);
 
 	return (
@@ -153,25 +162,17 @@ export default function Board() {
 					alignItems: "center",
 				}}
 			>
-				<Card
-					aboveTitle={"게시판"}
-					content={
-						<>
-							<MultilineTextFields
-								label="Jot down your thoughts..."
-								ref={contentRef}
-								rows={4}
-							></MultilineTextFields>
-							<ButtonGroup
-								onClickButtonOne={onClickSave}
-								onClickButtonTwo={onClickReset}
-								textButtonOne={"저장"}
-								textButtonTwo={"초기화"}
-							></ButtonGroup>
-						</>
-					}
-				></Card>
-
+				<MultilineTextFields
+					label="Jot down your thoughts..."
+					ref={contentRef}
+					rows={4}
+				></MultilineTextFields>
+				<ButtonGroup
+					onClickButtonOne={onClickSave}
+					onClickButtonTwo={onClickReset}
+					textButtonOne={"저장"}
+					textButtonTwo={"초기화"}
+				></ButtonGroup>
 				<Stack spacing={4}>
 					{conts
 						.slice() // 복사본
@@ -180,9 +181,10 @@ export default function Board() {
 							const date = new Date(content.createdAt);
 							const formattedDate = date.toLocaleString();
 							return (
-								<>
-									<Item key={index}>
+								<React.Fragment key={String(content.idx)}>
+									<Item>
 										[{index + 1}] {content.creator}:
+										<br />
 										{activeButton[index] === 1 ? (
 											<MultilineTextFields
 												defaultValue={
@@ -211,7 +213,7 @@ export default function Board() {
 											activeButton={activeButton[index]}
 										></ButtonGroup>
 									</Item>
-								</>
+								</React.Fragment>
 							);
 						})}
 				</Stack>

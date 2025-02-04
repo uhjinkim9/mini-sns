@@ -7,6 +7,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import Progress from "./ui/components/feedback/CircularProgress";
+import {AlertProvider} from "./ui/components/feedback/AlertProvider";
 
 import Frame from "./ui/layout/Frame";
 import Login from "./ui/pages/main/Login";
@@ -14,21 +15,23 @@ import Login from "./ui/pages/main/Login";
 function App() {
 	return (
 		<>
-			<BrowserRouter>
-				<Suspense fallback={<Progress></Progress>}>
-					<Routes>
-						<Route path="/" exact element={<Login />} />
-						<Route
-							path="/*"
-							element={
-								<>
-									<Frame />
-								</>
-							}
-						/>
-					</Routes>
-				</Suspense>
-			</BrowserRouter>
+			<AlertProvider>
+				<BrowserRouter>
+					<Suspense fallback={<Progress></Progress>}>
+						<Routes>
+							<Route path="/" exact element={<Login />} />
+							<Route
+								path="/*"
+								element={
+									<>
+										<Frame />
+									</>
+								}
+							/>
+						</Routes>
+					</Suspense>
+				</BrowserRouter>
+			</AlertProvider>
 		</>
 	);
 }

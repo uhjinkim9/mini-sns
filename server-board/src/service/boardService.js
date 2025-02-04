@@ -40,7 +40,7 @@ async function updateContent(boardIdx, boardContent, userId) {
 async function deleteContent(boardIdx) {
 	try {
 		if (!boardIdx) {
-			throw new Error("no boardIdx");
+			throw new Error("No boardIdx");
 		}
 		await BoardContent.destroy({
 			where: {
