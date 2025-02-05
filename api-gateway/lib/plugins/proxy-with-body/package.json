@@ -1,8 +1,0 @@
-{
-	"name": "proxy-with-body",
-	"version": "1.0.0",
-	"main": "index.js",
-	"dependencies": {
-		"proxy-with-body": "file:"
-	}
-}

@@ -6,6 +6,10 @@ import authService from "../service/authService.js";
 
 // import {Password} from "../util/password.js";
 
+// 테스트용으로 짧게
+const expiresInAccess = "2m";
+const expiresInRefresh = "4m";
+
 async function postLogin(req, res, next) {
 	try {
 		const {userId, userPw} = req.body;
@@ -23,18 +27,20 @@ async function postLogin(req, res, next) {
 			return res.status(401).json({message: "User not found"});
 		}
 
-		// 로그인 성공 시 token 발급
-		const {token} = await issueToken({
+		const {accessToken, refreshToken} = await issueToken({
 			userId,
 			companyId: existingUser.companyId,
 		});
-		if (token) {
-			await authService.createToken(userId, token);
+		// Insert the refreshToken to DB
+		if (refreshToken) {
+			await authService.createToken(userId, refreshToken);
 		}
 
+		// Return the accesssToken
 		return res.status(200).json({
 			user: existingUser,
-			token: token,
+			accessToken: accessToken,
+			refreshToken: refreshToken,
 		});
 	} catch (err) {
 		console.error("Error in postLogin:", err);
@@ -53,6 +59,7 @@ async function renewAccessToken(req, res, next) {
 	if (!existingToken) {
 		return res.status(401).json({message: "Invalid refresh token"});
 	}
+
 	const now = new Date();
 	if (new Date(existingToken.expireDate) < now) {
 		await authService.deleteToken(existingToken);
@@ -60,18 +67,21 @@ async function renewAccessToken(req, res, next) {
 	}
 
 	// Issue a new access token
-	const {token: newAccessToken} = issueToken({
+	const {accessToken, refreshToken} = issueToken({
 		userId: userId,
 		companyId: companyId,
 	});
-	console.log(newAccessToken);
-	if (newAccessToken) {
-		try {
-			await authService.createToken(userId, newAccessToken);
 
+	// Insert the refreshToken to DB
+	if (refreshToken) {
+		// 기존 리프레시 토큰 만료시키기 추가해야 함!
+		try {
+			await authService.createToken(userId, refreshToken);
+			// Return the accesssToken
 			return res.status(200).json({
 				message: "Access token renewed successfully",
-				token: newAccessToken,
+				accessToken: accessToken,
+				refreshToken: refreshToken,
 			});
 		} catch (err) {
 			console.err("Access token is not inserted in DB");
@@ -86,14 +96,21 @@ async function renewAccessToken(req, res, next) {
  * @return {json} Token
  */
 function issueToken(userInfo) {
-	const token = generateJwt(
+	const accessToken = generateJwt(
 		{
 			companyId: userInfo?.companyId,
 			userId: userInfo?.userId,
 		},
-		"1h"
+		expiresInAccess
 	);
-	return {token};
+	const refreshToken = generateJwt(
+		{
+			companyId: userInfo?.companyId,
+			userId: userInfo?.userId,
+		},
+		expiresInRefresh
+	);
+	return {accessToken, refreshToken};
 }
 
 /**

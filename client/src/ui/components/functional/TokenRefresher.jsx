@@ -6,7 +6,7 @@ import {jwtDecode} from "jwt-decode";
 import connect from "../../../util/fetch/connect.js";
 import useIsMounted from "../../../util/hook/useIsMounted.js";
 
-export default function SessionTimeReminder() {
+export default function TokenRefresher() {
 	const navigate = useNavigate();
 	const isMounted = useIsMounted();
 
@@ -19,8 +19,7 @@ export default function SessionTimeReminder() {
 		const exp = jwtDecode(token).exp;
 		const now = Math.floor(Date.now() / 1000); // 현재 시간(초 단위)
 
-		if (exp > now) {
-			console.log("Token valid");
+		if (exp > now + 1 * 60) {
 			return;
 		} else {
 			const userId = localStorage.getItem("userId");
@@ -47,19 +46,21 @@ export default function SessionTimeReminder() {
 				window.localStorage.setItem("token", res.data.token);
 				window.localStorage.setItem("userId", userId);
 				window.localStorage.setItem("companyId", companyId);
+				console.log("Token renewed");
 			} else {
 				navigate("/"); // redirect to the login page 여기서 튕기지 말고 게이트웨이에서 튕기자
 			}
 		} catch (err) {
 			console.log("Error: ", err);
+			navigate("/"); // redirect to the login page 여기서 튕기지 말고 게이트웨이에서 튕기자
 		}
 	}
 
 	useEffect(() => {
 		if (!isMounted) return;
-		setTimeout(() => {
-			checkToken();
-		}, 1000);
+		// setTimeout(() => {
+		checkToken();
+		// }, 1000);
 	}, [isMounted, checkToken]);
 
 	return <>TokenRefresher</>;

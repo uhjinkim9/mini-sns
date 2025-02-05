@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import style from "./style/DrawerStyle";
-import TokenRefresher from "../components/functional/TokenRefresher";
 import Header from "./Header";
 import SideBar from "./SideBar";
 
@@ -23,7 +22,6 @@ export default function PersistentDrawerRight({pages, onClickSideMenu}) {
 
 	return (
 		<Box sx={{display: "flex"}}>
-			<TokenRefresher />
 			<CssBaseline />
 
 			<Header open={open} handleDrawerOpen={handleDrawerOpen} />

@@ -7,6 +7,9 @@ db:
 # plugins:
 # express-gateway-plugin-example:
 #   param1: 'param from system.config'
+plugins:
+    jwt-policy:
+        package: "./manifest.js"
 
 middlewares:
     cors:

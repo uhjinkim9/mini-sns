@@ -34,10 +34,14 @@ export default function Login() {
 
 			if (res && res.status === 200) {
 				const resData = await res.data;
-				const token = resData.token;
+				const accessToken = resData.accessToken;
+				const refreshToken = resData.refreshToken;
+
+				console.log(res.data);
 
 				loginCallback(
-					token,
+					accessToken,
+					refreshToken,
 					resData.user.userId,
 					resData.user.companyId
 				);
@@ -50,8 +54,9 @@ export default function Login() {
 		}
 	}
 
-	function loginCallback(token, userId, companyId) {
-		window.localStorage.setItem("token", token);
+	function loginCallback(accessToken, refreshToken, userId, companyId) {
+		window.localStorage.setItem("accessToken", accessToken);
+		window.localStorage.setItem("refreshToken", refreshToken);
 		window.localStorage.setItem("userId", userId);
 		window.localStorage.setItem("companyId", companyId);
 	}
@@ -82,7 +87,7 @@ export default function Login() {
 								paddingBottom: "30px",
 							}}
 						>
-							U-CUBE 그룹웨어 로그인
+							로그인
 						</Typography>
 						<TextField
 							type="text"

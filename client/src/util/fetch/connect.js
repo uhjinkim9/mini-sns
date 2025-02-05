@@ -7,19 +7,22 @@ import {API_URL} from "../../util/context/config";
  * @return {json} 반환 데이터
  */
 async function requestFetch(url, param = null) {
-	const token = localStorage.getItem("token");
+	const accessToken = localStorage.getItem("accessToken");
+
 	const reqOpt = {
 		method: "POST",
 		// CORS 설정 시 필요(서버에서 credentials: true로 설정한 경우)
 		credentials: "include", // 통신 시 쿠키 등 인증 값 포함
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${accessToken}`,
 		},
 	};
+
 	if (param !== null) {
 		reqOpt.body = JSON.stringify(param);
 	}
+
 	try {
 		const res = await fetch(`${API_URL}${url}`, reqOpt);
 		const statusCode = res.status;

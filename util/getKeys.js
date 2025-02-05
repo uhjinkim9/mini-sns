@@ -18,6 +18,5 @@ const publicKey = fs.readFileSync(publicKeyPath, "utf8");
 
 // 비밀키
 export const JWT_PRIVATE_KEY = privateKey;
-
 // 공개키
 export const JWT_PUBLIC_KEY = publicKey;
