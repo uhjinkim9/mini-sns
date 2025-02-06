@@ -5,7 +5,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import IconButton from "@mui/material/IconButton";
 
 import style from "./style/DrawerStyle";
-import TokenRefresher from "../components/functional/TokenRefresher";
 
 export default function Header({open, handleDrawerOpen}) {
 	async function handleLogout() {

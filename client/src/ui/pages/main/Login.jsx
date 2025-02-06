@@ -10,9 +10,12 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
 import connect from "../../../util/fetch/connect.js";
+import {useAlert} from "../../components/feedback/AlertProvider.jsx";
+import checkStatus from "../../../util/tools/checkStatus.js";
 
 export default function Login() {
 	const navigate = useNavigate();
+	const {showAlert} = useAlert();
 
 	const [loginInfo, setLoginInfo] = useState({
 		userId: "",
@@ -28,16 +31,23 @@ export default function Login() {
 	};
 
 	async function submitLogin() {
+		if (checkStatus.isEmpty(loginInfo.userId)) {
+			showAlert("warning", "아이디를 입력하세요.");
+			return;
+		}
+		if (checkStatus.isEmpty(loginInfo.userPw)) {
+			showAlert("warning", "비밀번호를 입력하세요.");
+			return;
+		}
+
 		const url = "/api/auth/login";
 		try {
-			const res = await connect.requestFetch(url, loginInfo);
+			const res = await connect.requestFetchLogin(url, loginInfo);
 
 			if (res && res.status === 200) {
 				const resData = await res.data;
 				const accessToken = resData.accessToken;
 				const refreshToken = resData.refreshToken;
-
-				console.log(res.data);
 
 				loginCallback(
 					accessToken,

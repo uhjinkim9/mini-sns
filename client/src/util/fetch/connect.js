@@ -8,6 +8,8 @@ import {API_URL} from "../../util/context/config";
  */
 async function requestFetch(url, param = null) {
 	const accessToken = localStorage.getItem("accessToken");
+	const sessionUserId = localStorage.getItem("userId");
+	const sessionCompanyId = localStorage.getItem("companyId");
 
 	const reqOpt = {
 		method: "POST",
@@ -19,8 +21,23 @@ async function requestFetch(url, param = null) {
 		},
 	};
 
+	console.log(
+		"url:",
+		url,
+		"/ param:",
+		param,
+		"/ sessionUserId:",
+		sessionUserId,
+		"/ sessionCompanyId:",
+		sessionCompanyId
+	);
+
 	if (param !== null) {
-		reqOpt.body = JSON.stringify(param);
+		reqOpt.body = JSON.stringify({
+			...param,
+			userId: sessionUserId ? sessionUserId : null,
+			companyId: sessionCompanyId ? sessionCompanyId : null,
+		});
 	}
 
 	try {
@@ -41,13 +58,12 @@ async function requestFetch(url, param = null) {
 }
 
 /**
- * API를 사용해 서버와 통신하는 함수(POST)
- * refresh token DB에 있는지 검증 시 사용
+ * 로그인에 사용하는 Fetch 함수
  * @param {string} url 접근하고자 하는 URL
  * @param {json} param 전달 데이터(token)
  * @return {json} 반환 데이터
  */
-async function requestFetchToken(url, param = null) {
+async function requestFetchLogin(url, param = null) {
 	const reqOpt = {
 		method: "POST",
 		credentials: "include",
@@ -75,5 +91,5 @@ async function requestFetchToken(url, param = null) {
 	}
 }
 
-const connect = {requestFetch, requestFetchToken};
+const connect = {requestFetch, requestFetchLogin};
 export default connect;

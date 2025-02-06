@@ -1,0 +1,30 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "API Gateway Debugger",
+			"program": "${workspaceFolder}/api-gateway/server.js",
+			"request": "launch",
+			"skipFiles": ["<node_internals>/**"],
+			"type": "node",
+			"restart": true
+		},
+		{
+			"name": "Server-Auth Debegger",
+			"program": "${workspaceFolder}/server-auth/src/server.js",
+			"request": "launch",
+			"skipFiles": ["<node_internals>/**"],
+			"type": "node",
+			"env": {
+				"DB_HOST": "61.74.242.181",
+				"DB_NAME": "gw_mini-sns_auth",
+				"DB_PORT": "38936",
+				"DB_USER": "pmis",
+				"DB_PASSWORD": "pmis0408!"
+			}
+		}
+	]
+}

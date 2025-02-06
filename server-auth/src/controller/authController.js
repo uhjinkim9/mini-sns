@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import {JWT_PRIVATE_KEY} from "../context/config.js";
+import {JWT_PRIVATE_KEY, JWT_PUBLIC_KEY} from "../context/config.js";
 import checkStatus from "../../../util/checkStatus.js";
 import authService from "../service/authService.js";
 
@@ -33,7 +33,13 @@ async function postLogin(req, res, next) {
 		});
 		// Insert the refreshToken to DB
 		if (refreshToken) {
-			await authService.createToken(userId, refreshToken);
+			await authService.insertToken(
+				userId,
+				accessToken,
+				refreshToken
+				// loginIp,
+				// userAgent
+			);
 		}
 
 		// Return the accesssToken
@@ -52,36 +58,45 @@ async function postLogin(req, res, next) {
  * Renew the access token using a valid refresh token
  */
 async function renewAccessToken(req, res, next) {
-	const {token, userId, companyId} = req.body;
+	console.log(req.body);
+	const {accessToken, userId, companyId} = req.body;
 
-	const existingToken = await authService.findToken(token);
-
+	// 액세스 토큰을 통해 리프레시 토큰 데이터 불러오기
+	const existingToken = await authService.findToken(accessToken);
 	if (!existingToken) {
+		// 리프레시 토큰이 존재하지 않으니 로그인 페이지로 이동
 		return res.status(401).json({message: "Invalid refresh token"});
 	}
+	const refreshToken = existingToken.refreshToken;
 
-	const now = new Date();
-	if (new Date(existingToken.expireDate) < now) {
-		await authService.deleteToken(existingToken);
-		return res.status(401).json({message: "Refresh token has expired"});
-	}
+	// 리프레시 토큰 검증
+	jwt.verify(refreshToken, JWT_PUBLIC_KEY, async (err, decoded) => {
+		if (err) {
+			await authService.deleteToken(refreshToken);
+			return res.status(401).json({
+				error: "리프레시 토큰 만료 ➡️ 토큰 삭제",
+			});
+		}
+	});
 
-	// Issue a new access token
-	const {accessToken, refreshToken} = issueToken({
+	// 액세스 토큰 재발급
+	const {newAccessToken, newRefreshToken} = issueToken({
 		userId: userId,
 		companyId: companyId,
 	});
 
 	// Insert the refreshToken to DB
-	if (refreshToken) {
-		// 기존 리프레시 토큰 만료시키기 추가해야 함!
+	if (newRefreshToken) {
 		try {
-			await authService.createToken(userId, refreshToken);
+			authService.insertToken(userId, newRefreshToken).then(() => {
+				authService.deleteToken(refreshToken); // 기존 리프레시 토큰 삭제
+			});
+
 			// Return the accesssToken
 			return res.status(200).json({
 				message: "Access token renewed successfully",
-				accessToken: accessToken,
-				refreshToken: refreshToken,
+				accessToken: newAccessToken,
+				refreshToken: newRefreshToken,
 			});
 		} catch (err) {
 			console.err("Access token is not inserted in DB");

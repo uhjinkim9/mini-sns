@@ -16,10 +16,23 @@ const UserToken = sequelize.define(
 			allowNull: false,
 			comment: "사용자 ID",
 		},
-		token: {
+		accessToken: {
 			type: Sequelize.STRING(500),
 			allowNull: false,
-			comment: "사용자 토큰",
+			comment: "사용자 액세스 토큰",
+		},
+		refreshToken: {
+			type: Sequelize.STRING(500),
+			allowNull: false,
+			comment: "사용자 리프레시 토큰",
+		},
+		loginIp: {
+			type: Sequelize.STRING(50),
+			comment: "사용자 로그인 IP",
+		},
+		userAgent: {
+			type: Sequelize.STRING(1000),
+			comment: "사용자 소프트웨어 식별 정보",
 		},
 		issueDate: {
 			type: DataTypes.DATE,

@@ -22,9 +22,9 @@ serviceEndpoints:
 policies:
     - cors
     - log
-    - jwt
     - proxy
     - jwt-policy
+    # - jwt // jwt-policy(custom) also executes jwt verification
     # - basic-auth
     # - expression
     # - key-auth
@@ -70,18 +70,19 @@ pipelines:
                       exposedHeaders: ["Authorization"]
                       preflightContinue: false
                       optionsSuccessStatus: 204
-            - jwt:
-                  action:
-                      secretOrPublicKeyFile: ../keys/public.pem # JWT 검증
-                      checkCredentialExistence: false
-                      passThrough:
-                          action:
-                              redirect:
-                                  statusCode: 307
-                                  url: "/"
+            # - jwt:
+            #       action:
+            #           secretOrPublicKeyFile: ../keys/public.pem # JWT 검증
+            #           checkCredentialExistence: false
+            #           passThrough:
+            #               action:
+            #                   redirect:
+            #                       statusCode: 307
+            #                       url: "/"
             - jwt-policy:
                   action:
                       enableRefresh: true
+
             - proxy:
                   action:
                       serviceEndpoint: boardService
