@@ -58,6 +58,13 @@ async function requestFetch(url, param = null) {
 }
 
 /**
+ * requestFetch()의 콜백이 되는 함수
+ * 서버에서 발생하는 상태 번호와 메시지를 매칭하여 반환한다.
+ * @return {json} 반환 데이터
+ */
+async function fetchCallback(url, param = null) {}
+
+/**
  * 로그인에 사용하는 Fetch 함수
  * @param {string} url 접근하고자 하는 URL
  * @param {json} param 전달 데이터(token)
