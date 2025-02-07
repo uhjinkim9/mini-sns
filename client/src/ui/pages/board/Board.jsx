@@ -1,4 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import useIsMounted from "../../../util/hook/useIsMounted.js";
 
 import Container from "@mui/material/Container";
 import {CssBaseline} from "@mui/material";
@@ -11,7 +13,6 @@ import ButtonGroup from "../../components/inputs/ButtonGroup";
 import {useAlert} from "../../components/feedback/AlertProvider.jsx";
 
 import connect from "../../../util/fetch/connect.js";
-import useIsMounted from "../../../util/hook/useIsMounted.js";
 import checkStatus from "../../../util/tools/checkStatus.js";
 
 const Item = styled(Paper)(({theme}) => ({
@@ -28,12 +29,13 @@ const Item = styled(Paper)(({theme}) => ({
 export default function Board() {
 	const contentRef = useRef();
 	const contentEditRef = useRef();
-	const isMounted = useIsMounted();
+	const navigate = useNavigate();
 	const {showAlert} = useAlert();
 
 	const userId = localStorage.getItem("userId");
 	const [conts, setConts] = useState([]);
 	const [activeButton, setActiveButton] = useState({});
+	const isMounted = useIsMounted();
 
 	async function onClickSave(index, boardIdx = null) {
 		let content;
@@ -61,7 +63,7 @@ export default function Board() {
 			if (res && statCd === 200) {
 				getBoardContents();
 				onClickReset();
-			} else if (statCd === 401) {
+			} else if (!statCd === 401) {
 				console.log("Failed response: ", res.data);
 			} else {
 				console.log("Unexpected response status: ", statCd);
@@ -146,9 +148,9 @@ export default function Board() {
 	}
 
 	useEffect(() => {
-		// if (isMounted) {
-		getBoardContents();
-		// }
+		if (isMounted) {
+			getBoardContents();
+		}
 	}, [isMounted]);
 
 	return (

@@ -47,6 +47,8 @@ async function requestFetch(url, param = null) {
 		if (!res.ok) {
 			throw new Error(`HTTP error! status: ${res.status}`);
 		}
+		console.log("프론트에서의 data", data);
+
 		return {
 			status: statusCode,
 			data,

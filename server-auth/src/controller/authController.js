@@ -7,8 +7,8 @@ import authService from "../service/authService.js";
 // import {Password} from "../util/password.js";
 
 // 테스트용으로 짧게
-const expiresInAccess = "2m";
-const expiresInRefresh = "4m";
+const expiresInAccess = "10s";
+const expiresInRefresh = "20s";
 
 async function postLogin(req, res, next) {
 	try {
@@ -68,29 +68,35 @@ async function renewAccessToken(req, res, next) {
 		return res.status(401).json({message: "Invalid refresh token"});
 	}
 	const refreshToken = existingToken.refreshToken;
+	console.log("refreshToken!!!!!!!!!!!!!!!", refreshToken);
 
 	// 리프레시 토큰 검증
 	jwt.verify(refreshToken, JWT_PUBLIC_KEY, async (err, decoded) => {
 		if (err) {
 			await authService.deleteToken(refreshToken);
 			return res.status(401).json({
+				// 여기서 중복 응답 발생
 				error: "리프레시 토큰 만료 ➡️ 토큰 삭제",
 			});
 		}
+		console.log("리프레시 토큰 검증됨");
 	});
 
 	// 액세스 토큰 재발급
-	const {newAccessToken, newRefreshToken} = issueToken({
-		userId: userId,
-		companyId: companyId,
-	});
+	const {accessToken: newAccessToken, refreshToken: newRefreshToken} =
+		issueToken({userId, companyId});
 
+	console.log(
+		newAccessToken,
+		newRefreshToken,
+		"newAccessToken, newRefreshToken"
+	);
 	// Insert the refreshToken to DB
 	if (newRefreshToken) {
 		try {
-			authService.insertToken(userId, newRefreshToken).then(() => {
-				authService.deleteToken(refreshToken); // 기존 리프레시 토큰 삭제
-			});
+			authService.insertToken(userId, newAccessToken, newRefreshToken);
+
+			console.log("여기는 컨트롤러고 갱신 오류 없다");
 
 			// Return the accesssToken
 			return res.status(200).json({
@@ -140,7 +146,8 @@ function generateJwt(userInfo, expiresIn) {
 	const payload = {userId: userInfo.userId, companyId: userInfo.companyId};
 	const secret = JWT_PRIVATE_KEY;
 	const options = {algorithm: "RS256", expiresIn: expiresIn};
-	return jwt.sign(payload, secret, options);
+	const token = jwt.sign(payload, secret, options);
+	return token;
 }
 
 const authController = {postLogin, issueToken, renewAccessToken};

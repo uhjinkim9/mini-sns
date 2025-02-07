@@ -1,5 +1,6 @@
 import React, {useState, useEffect, Suspense, lazy} from "react";
 import {useNavigate, Route, Routes, useLocation} from "react-router-dom";
+import useIsMounted from "../../util/hook/useIsMounted.js";
 
 import connect from "../../util/fetch/connect.js";
 import Progress from "../components/feedback/CircularProgress.jsx";
@@ -12,6 +13,7 @@ export default function Frame() {
 
 	const navigate = useNavigate();
 	const location = useLocation();
+	const isMounted = useIsMounted();
 
 	async function getPages() {
 		const url = "/api/board/getPages";
@@ -28,8 +30,10 @@ export default function Frame() {
 	}
 
 	useEffect(() => {
-		getPages();
-	}, []);
+		if (isMounted) {
+			getPages();
+		}
+	}, [isMounted]);
 
 	useEffect(() => {
 		setPageUrl(location.pathname);

@@ -17,6 +17,7 @@ async function findToken(tokenStr) {
 			accessToken: tokenStr,
 		},
 	});
+	console.log("token in service!!!!!!!!~~~~", token);
 	return token;
 }
 

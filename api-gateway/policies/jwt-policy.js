@@ -4,7 +4,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const REFRESH_TOKEN_URL = "http://localhost:5003/api/board/getPages";
+const REFRESH_TOKEN_URL = "http://localhost:5002/api/auth/renewAccessToken";
 
 // PEM 파일 읽기
 const publicKeyPath = path.resolve(path.join("..", "keys", "public.pem"));
@@ -37,7 +37,7 @@ async function verifyToken(req, res, next, actionParams) {
 	}
 
 	const authHeader = req.headers["authorization"];
-	// const userAgent = req.headers["user-agent"] || "Unknown User-Agent";
+	// const userAgent = req.headers["user-agent"];
 	const accessToken = authHeader.split(" ")[1];
 
 	// 인증 헤더 없으면 오류 반환
@@ -52,58 +52,70 @@ async function verifyToken(req, res, next, actionParams) {
 
 	// 인증 헤더 있으면 액세스 토큰 검증
 	jwt.verify(accessToken, JWT_PUBLIC_KEY, (err, decoded) => {
+		// 만료되거나 무효
 		if (err) {
 			// 인증 헤더 있고 이 정책 활성화
 			if (actionParams.enableRefresh) {
 				console.log("Invalid or expired token");
-				next(); // 재발급 로직으로 이동
+
+				const decodedExpired = jwt.decode(accessToken);
+				const {userId, companyId} = decodedExpired;
+				return refreshToken(
+					req,
+					res,
+					next,
+					accessToken,
+					userId,
+					companyId
+				);
 			} else {
-				// 인증 헤더 있지만 이 정책 비활성화
+				// 인증 헤더 있지만 이 정책 비활성화, 프론트에서 재로그인
 				return res.status(401).json({
-					error: "enableRefresh(actionParam in jwt-policy of gateway) is false",
+					error: "JWT 커스텀 정책의 enableRefresh(actionParam)이 false인 상태",
 				});
 			}
 		}
 
-		// 검증 성공하면 페이로드를 반환하지만, 실패하면 undefined
+		// 페이로드가 있으면 req.user에 저장
 		req.user = decoded;
 		if (!decoded) {
-			console.log("액세스 만료하여 페이로드 없음 ➡️ 토큰 갱신");
-			return refreshToken(accessToken, userId, companyId);
+			// 무효 토큰의 경우 위에서 갱신 함수 분기를 이미 탔으니, 이 예외는 아예 발급된 적 없는 액세스 토큰의 경우에 발생
+			return res
+				.status(401)
+				.json({error: "무효화한 토큰으로 페이로드 추출 불가"});
 		}
-
-		console.log("❗❗req.user", req.user);
-
 		const {
 			userId: userId,
 			companyId: companyId,
 			iat: iat,
 			exp: exp,
-		} = req.user; // 페이로드 구조 분해
+		} = decoded; // 페이로드 구조 분해
 
-		// 재발급
+		// 남은 유효 시간에 따라 재발급
 		const now = Math.floor(Date.now() / 1000); // 현재 시각(초 단위)
 		const bufferTime = 60; // 60초
 		// 만료 1분 전, 발급 시각 5분 경과 시 갱신
 		if (
 			exp - now < bufferTime &&
-			now - iat > bufferTime * 5 &&
+			// now - iat > bufferTime * 5 &&
 			actionParams.enableRefresh
 		) {
 			console.log("액세스 여전히 유효, 발급 후 5분 경과 ➡️ 토큰 갱신");
-			return refreshToken(accessToken, userId, companyId);
+			return refreshToken(req, res, next, accessToken, userId, companyId);
 		}
 
 		// 토큰 유효: 바이패스
-		next();
+		return next();
 	});
 }
 
-async function refreshToken(accessToken, userId, companyId) {
+async function refreshToken(req, res, next, accessToken, userId, companyId) {
 	const param = {accessToken, userId, companyId};
+	console.log("리프레시 토큰 함수 들어옴!~!~!~!~!~!");
 
 	try {
 		const response = await fetch(REFRESH_TOKEN_URL, {
+			// 여기서 중복 응답 발생
 			method: "POST",
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify(param),
@@ -111,11 +123,42 @@ async function refreshToken(accessToken, userId, companyId) {
 
 		const data = await response.json();
 		const statCd = response.status;
+		console.log("정책 내의 갱신 응답 데이터~!~!~!~!~!~!~!", statCd, data);
+
+		// 갱신된 액세스 토큰을 원래 요청의 헤더에 설정
+		req.headers["authorization"] = `Bearer ${data.accessToken}`; // 헤더 말고 응답으로 주기 바디로
+		// RequestContentLengthMismatchError: Request body length does not match content-length header 오류를 제거하기 위한 코드인데 이걸 하는 게 맞는지 잘 모르겠음 일단 추가
+		const modifiedHeaders = {...req.headers};
+		delete modifiedHeaders["content-length"];
 
 		if (statCd === 200) {
-			console.log("Token successfully renewed");
-			req.headers["authorization"] = `Bearer ${data.token}`;
-			return next();
+			console.log("토큰 갱신 완료👌");
+
+			// return next();
+			// return res.status(200).json({
+			// 	message: "토큰 갱신 완료",
+			// 	accessToken: data.accessToken,
+			// 	refreshToken: data.refreshToken,
+			// });
+
+			console.log("original인데 윗부분이고 req 출력", req);
+
+			// 원래 요청 실행
+			const originalUrl = matchBaseUrl(req.originalUrl);
+			const originalResponse = await fetch(originalUrl, {
+				method: req.method,
+				headers: modifiedHeaders,
+				body: JSON.stringify(req.body),
+			});
+
+			const originalData = await originalResponse.json();
+			console.log(
+				"originalData인데 이 부분이 응답이 안오는 듯",
+				originalData
+			);
+
+			// 백엔드의 원래 응답을 프론트엔드로 전달
+			return res.status(originalResponse.status).json(originalData);
 		} else {
 			console.log("Failed to renew token");
 			return res.status(401).json({error: "Failed to renew token"});
@@ -124,4 +167,22 @@ async function refreshToken(accessToken, userId, companyId) {
 		console.error("Token refresh error:", err);
 		return res.status(500).json({error: "Internal server error"});
 	}
+}
+
+function matchBaseUrl(url) {
+	const baseUrlMap = {
+		"/api/auth": "http://localhost:5002",
+		"/api/board": "http://localhost:5003",
+	};
+
+	const matched = Object.keys(baseUrlMap).find((key) => url.startsWith(key));
+
+	if (!matched) {
+		return res.status(400).json({error: "그런 서버 없다"});
+	}
+
+	const apiBaseUrl = baseUrlMap[matched];
+	const originalUrl = new URL(url, apiBaseUrl); // 절대경로 변환
+
+	return originalUrl;
 }
