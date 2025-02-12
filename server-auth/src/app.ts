@@ -1,0 +1,34 @@
+/**********************
+ * express 앱 설정 모듈
+ **********************/
+
+import express from "express";
+import path from "path";
+
+import cors from "cors";
+
+import {CLIENT_URL, GATEWAY_URL} from "./0. util/context/config";
+import {getAppRootDir} from "./0. util/context/directory";
+
+const app = express();
+
+// JSON 및 URL-encoded 파싱 미들웨어 추가
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+// CORS 설정
+app.use(
+	cors({
+		origin: [CLIENT_URL || "", GATEWAY_URL || ""],
+		credentials: true,
+		// optionsSuccessStatus: 200,
+	})
+);
+
+// 정적 파일 제공
+app.use(express.static(path.join(getAppRootDir(), "public")));
+
+import authRoutes from "./1. router/authRoutes";
+app.use("/api/auth", authRoutes);
+
+export default app;

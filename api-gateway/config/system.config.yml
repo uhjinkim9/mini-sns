@@ -14,7 +14,7 @@ plugins:
 middlewares:
     cors:
         action:
-            origin: "http://localhost:5000" # React 클라이언트 URL
+            origin: ["http://localhost:5000", "http://localhost:5173"] # React 클라이언트 URL
             credentials: true
 # plugins:
 #     proxy-with-body:

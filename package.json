@@ -6,7 +6,14 @@
     "start:back-stable": "concurrently \"cd api-gateway && npm start\" \"cd server-auth && npm start\""
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "concurrently": "^9.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
