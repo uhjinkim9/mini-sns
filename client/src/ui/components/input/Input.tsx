@@ -24,6 +24,7 @@ interface InputProps {
 		};
 	};
 	helperText?: string; // 도움말(입력란 아래)
+	fullWidth?: boolean;
 	error?: boolean; // 에러 표시
 	multiline?: boolean; // 다행 입력 여부
 	maxRows?: {rows?: number}; // 다행 입력란일 경우 최대 행 수
@@ -47,6 +48,7 @@ export default function Input(props: InputProps) {
 			input: {readOnly = false} = {},
 			inputLabel: {shrink = false} = {},
 		} = {},
+		fullWidth = false,
 		error = false,
 		multiline = false,
 		maxRows = {rows: 0},
@@ -75,6 +77,7 @@ export default function Input(props: InputProps) {
 					input: {readOnly},
 					inputLabel: {shrink},
 				}}
+				fullWidth={fullWidth}
 				error={error}
 				multiline={multiline}
 				maxRows={maxRows.rows}

@@ -1,16 +1,16 @@
-/**
+/************************
  * 서버 실행 모듈
- * node로 실행하는 파일
- */
+ * 'node'로 실행하는 파일
+ ************************/
 
 import http from "http";
 
-import app from "./app.js";
-import sequelize from "./database/database.js";
+import sequelize from "./0. util/database/database";
+import app from "./app";
 
-// Models
-import Page from "./model/page.js";
-import BoardContent from "./model/boardContent.js";
+// 모델 Import해야 DB에서 테이블 생성 수행
+import Page from "./4. model/page";
+import BoardContent from "./4. model/boardContent";
 
 const server = http.createServer(app);
 
@@ -36,9 +36,9 @@ sequelize
 	// })
 	.then(() => {
 		server.listen(5003, () => {
-			console.log("the server-board is running on 5003");
+			console.log("the board server is running on 5002");
 		});
 	})
-	.catch((err) => {
+	.catch((err: any) => {
 		console.log(err);
 	});

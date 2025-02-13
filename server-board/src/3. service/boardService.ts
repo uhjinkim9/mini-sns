@@ -1,7 +1,15 @@
-import Page from "../model/page.js";
-import BoardContent from "../model/boardContent.js";
+import Page from "@/4. model/page";
+import BoardContent from "@/4. model/boardContent";
 
-async function createContent(boardContent, userId) {
+interface BoardContentData {
+	boardContent: string;
+	creator: string;
+}
+
+async function createContent(
+	boardContent: string,
+	userId: string
+): Promise<boolean> {
 	try {
 		await BoardContent.create({
 			boardContent: boardContent,
@@ -14,7 +22,11 @@ async function createContent(boardContent, userId) {
 	}
 }
 
-async function updateContent(boardIdx, boardContent, userId) {
+async function updateContent(
+	boardIdx: number,
+	boardContent: string,
+	userId: string
+): Promise<boolean> {
 	try {
 		if (!boardContent) {
 			throw new Error("boardContent cannot be null or undefined");
@@ -37,7 +49,7 @@ async function updateContent(boardIdx, boardContent, userId) {
 	}
 }
 
-async function deleteContent(boardIdx) {
+async function deleteContent(boardIdx: number): Promise<boolean> {
 	try {
 		if (!boardIdx) {
 			throw new Error("No boardIdx");
@@ -54,11 +66,11 @@ async function deleteContent(boardIdx) {
 	}
 }
 
-async function selectPages() {
+async function selectPages(): Promise<Page[]> {
 	return await Page.findAll();
 }
 
-async function selectContents() {
+async function selectContents(): Promise<BoardContent[]> {
 	return await BoardContent.findAll();
 }
 
@@ -69,4 +81,5 @@ const boardService = {
 	deleteContent,
 	selectContents,
 };
+
 export default boardService;

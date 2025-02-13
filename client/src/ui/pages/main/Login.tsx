@@ -4,12 +4,15 @@ import {useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
+import {useMediaQuery, useTheme} from "@mui/material"; // 반응형 처리를 위한 MUI 훅
 
 import Input from "../../components/input/Input";
 import Button from "../../components/input/Button";
 
 import {requestPost} from "../../../util/axios/apiService";
 import {isEmpty} from "../../../util/validator/emptyCheck";
+
+import {setItem} from "../../../util/context/localStorage";
 
 interface LoginInfo {
 	userId: string;
@@ -22,7 +25,8 @@ interface eTarget {
 
 export default function Login() {
 	const navigate = useNavigate();
-	// const {showAlert} = useAlert();
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // 화면이 `sm` (600px 이하)일 경우 true
 
 	const [loginInfo, setLoginInfo] = useState<LoginInfo>({
 		userId: "",
@@ -39,11 +43,9 @@ export default function Login() {
 
 	async function submitLogin() {
 		if (isEmpty(loginInfo.userId)) {
-			// showAlert("warning", "아이디를 입력하세요.");
 			return;
 		}
 		if (isEmpty(loginInfo.userPw)) {
-			// showAlert("warning", "비밀번호를 입력하세요.");
 			return;
 		}
 
@@ -51,22 +53,17 @@ export default function Login() {
 		try {
 			const res = await requestPost(url, loginInfo);
 
-			console.log("res", res);
-			// if (res && res.status === 200) {
-			// 	const resData = await res.data;
-			// 	const accessToken = resData.accessToken;
-			// 	const refreshToken = resData.refreshToken;
-
-			// 	loginCallback(
-			// 		accessToken,
-			// 		refreshToken,
-			// 		resData.user.userId,
-			// 		resData.user.companyId
-			// 	);
-			// 	navigate("/main/Main");
-			// } else if (res.status === 404) {
-			// 	alert("회원 정보가 없습니다.");
-			// }
+			if (res) {
+				loginCallback(
+					res.accessToken,
+					res.refreshToken,
+					res.user.userId,
+					res.user.companyId
+				);
+				navigate("/main/Main");
+			} else if (res.status === 404) {
+				alert("회원 정보가 없습니다.");
+			}
 		} catch (err) {
 			console.log("Error: ", err);
 		}
@@ -78,70 +75,65 @@ export default function Login() {
 		userId: string,
 		companyId: string
 	) {
-		window.localStorage.setItem("accessToken", accessToken);
-		window.localStorage.setItem("refreshToken", refreshToken);
-		window.localStorage.setItem("userId", userId);
-		window.localStorage.setItem("companyId", companyId);
+		setItem("accessToken", accessToken);
+		setItem("refreshToken", refreshToken);
+		setItem("userId", userId);
+		setItem("companyId", companyId);
 	}
 
-	// 로그인 페이지로 왔지만 token 만료가 1분 이상 남았을 때 Main으로 이동
-
 	return (
-		<>
-			<React.Fragment>
-				<CssBaseline />
-				<Box
-					component="form"
-					sx={{
-						display: "flex",
-						flexDirection: "column",
-						justifyContent: "center",
-						alignItems: "center",
-						minHeight: "100vh",
-					}}
-					noValidate
-					autoComplete="off"
+		<React.Fragment>
+			<CssBaseline />
+			<Box
+				component="form"
+				sx={{
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "center",
+					alignItems: "center",
+					minHeight: "100vh",
+					width: "100%",
+					maxWidth: isMobile ? "90%" : "400px", // 모바일에서는 더 작게 조정
+					padding: isMobile ? "20px" : "40px", // 모바일에서 패딩 줄이기
+					backgroundColor: "white",
+					boxShadow: isMobile
+						? "none"
+						: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+					borderRadius: "8px",
+					margin: "auto",
+				}}
+				noValidate
+				autoComplete="off"
+			>
+				<Typography
+					variant={isMobile ? "h6" : "h5"} // 모바일에서는 글자 크기 작게
+					component="h2"
+					sx={{paddingBottom: "20px", fontWeight: "bold"}}
 				>
-					<Typography
-						variant="h5"
-						component="h2"
-						sx={{
-							paddingBottom: "30px",
-						}}
-					>
-						로그인
-					</Typography>
+					로그인
+				</Typography>
 
-					<Input
-						variant="outlined"
-						label="ID"
-						slotProps={{
-							inputLabel: {
-								shrink: true,
-							},
-						}}
-						onChange={handleInputChange}
-						name="userId"
-						value={loginInfo.userId}
-					/>
-					<Input
-						variant="outlined"
-						label="PW"
-						type="password"
-						slotProps={{
-							inputLabel: {
-								shrink: true,
-							},
-						}}
-						onChange={handleInputChange}
-						name="userPw"
-						value={loginInfo.userPw}
-					/>
-					<Button variant="contained" onClick={submitLogin}>
-						로그인
-					</Button>
-				</Box>
-			</React.Fragment>
-		</>
+				<Input
+					variant="outlined"
+					label="ID"
+					fullWidth
+					onChange={handleInputChange}
+					name="userId"
+					value={loginInfo.userId}
+				/>
+				<Input
+					variant="outlined"
+					label="PW"
+					type="password"
+					fullWidth
+					onChange={handleInputChange}
+					name="userPw"
+					value={loginInfo.userPw}
+				/>
+				<Button variant="contained" fullWidth onClick={submitLogin}>
+					로그인
+				</Button>
+			</Box>
+		</React.Fragment>
 	);
 }

@@ -1,22 +1,18 @@
-import User from "../4. model/user";
-import UserToken from "../4. model/userToken";
+import User from "@/4. model/user";
+import UserToken from "@/4. model/userToken";
+import {UserAttributes} from "@/4. model/user";
+import {Token} from "@/5. dto/user.interface";
 
-import {UserTokenPayload} from "../5. dto/user.interface";
-
-async function findUser(
-	userId: string,
-	userPw: string
-): Promise<UserTokenPayload | null> {
+async function findUser(userId: string): Promise<UserAttributes | null> {
 	const user = await User.findOne({
 		where: {
 			userId: userId,
-			userPw: userPw, // 해시 함수 추가 시 지움
 		},
 	});
 	return user;
 }
 
-async function findToken(tokenStr: string): Promise<UserTokenPayload | null> {
+async function findToken(tokenStr: string): Promise<Token | null> {
 	const token = await UserToken.findOne({
 		where: {
 			accessToken: tokenStr,

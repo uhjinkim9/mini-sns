@@ -1,7 +1,7 @@
 import {DataTypes, Model, Optional} from "sequelize";
 import sequelize from "../0. util/database/database"; // DB 연결
 
-interface UserAttributes {
+export interface UserAttributes {
 	companyId: string;
 	userId: string;
 	userPw: string;
@@ -15,7 +15,7 @@ interface UserAttributes {
 	refreshToken?: string;
 	email?: string | null;
 	extEmail?: string | null;
-	mailYn?: boolean;
+	emailYn?: boolean;
 	createUser?: string | null;
 	updateUser?: string | null;
 	createdAt?: Date;
@@ -33,7 +33,7 @@ interface UserCreationAttributes
 		| "loginFailCount"
 		| "email"
 		| "extEmail"
-		| "mailYn"
+		| "emailYn"
 		| "createUser"
 		| "updateUser"
 		| "createdAt"
@@ -57,7 +57,7 @@ class User
 	public refreshToken!: string;
 	public email!: string | null;
 	public extEmail!: string | null;
-	public mailYn!: boolean;
+	public emailYn!: boolean;
 	public createUser!: string | null;
 	public updateUser!: string | null;
 	public readonly createdAt!: Date;
@@ -83,7 +83,7 @@ User.init(
 			comment: "사용자 이름",
 		},
 		userPw: {
-			type: DataTypes.STRING(50),
+			type: DataTypes.STRING(500),
 			allowNull: false,
 			comment: "사용자 비밀번호",
 		},
@@ -140,7 +140,7 @@ User.init(
 				isEmail: true,
 			},
 		},
-		mailYn: {
+		emailYn: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
 			comment: "안내 메일 수신 여부",
@@ -173,7 +173,7 @@ User.init(
 		indexes: [
 			{
 				unique: true,
-				fields: ["userId", "email"],
+				fields: ["user_id"],
 			},
 		],
 	}

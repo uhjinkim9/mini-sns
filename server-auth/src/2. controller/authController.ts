@@ -1,12 +1,10 @@
 import jwt, {Algorithm} from "jsonwebtoken";
-import {Request, Response, NextFunction} from "express";
+import {Request, Response} from "express";
 
-import {JWT_PRIVATE_KEY, JWT_PUBLIC_KEY} from "../0. util/context/config";
-import {isEmpty} from "../0. util/validator/emptyCheck";
+import {JWT_PRIVATE_KEY, JWT_PUBLIC_KEY} from "@/0. util/context/config";
 import password from "@/0. util/validator/password";
-
-import authService from "../3. service/authService";
-import {UserTokenPayload} from "../5. dto/user.interface";
+import authService from "@/3. service/authService";
+import {LoginInfo, TokenArgs} from "../5. dto/user.interface";
 
 // 테스트용으로 짧게
 const expiresInAccess = "10s";
@@ -15,17 +13,15 @@ const expiresInRefresh = "20s";
 const authController = {
 	doLogin: async (req: Request, res: Response): Promise<Response> => {
 		try {
-			const {userId, userPw}: UserTokenPayload = req.body;
+			const {userId, userPw}: LoginInfo = req.body;
 
+			console.log("컨트롤러", userId, userPw);
 			// 프론트에서 유효성 검사
 			// if (isEmpty(userId) || isEmpty(userPw)) {
 			// 	return res.status(404).json({message: "ID or PW is empty"});
 			// }
 
-			const existingUser = await authService.findUser(
-				userId as string,
-				userPw as string
-			);
+			const existingUser = await authService.findUser(userId as string);
 
 			if (!existingUser) {
 				return res.status(404).json({message: "User not found"});
@@ -158,20 +154,21 @@ export default authController;
 
 /**
  * Issue JWT when login succeeds
- * @return {json} Token
+ * @param {string} userInfo 토큰에 담길 사용자 정보
+ * @return {json} 토큰
  */
-function issueToken(userInfo: UserTokenPayload) {
+function issueToken(userInfo: TokenArgs) {
 	const accessToken = generateJwt(
 		{
-			userId: userInfo?.userId,
-			companyId: userInfo?.companyId,
+			userId: userInfo.userId,
+			companyId: userInfo.companyId,
 		},
 		expiresInAccess
 	);
 	const refreshToken = generateJwt(
 		{
-			companyId: userInfo?.companyId,
-			userId: userInfo?.userId,
+			userId: userInfo.userId,
+			companyId: userInfo.companyId,
 		},
 		expiresInRefresh
 	);
@@ -180,13 +177,13 @@ function issueToken(userInfo: UserTokenPayload) {
 
 /**
  * Generate JWT with user info
- * @param {string} userId User ID
+ * @param {string} userInfo 토큰에 담길 사용자 정보
  * @constant {object} payload Info to be included in token
  * @constant {string} secret Private key
  * @constant {object} options Token options
  * @return {string} Token
  */
-function generateJwt(userInfo: UserTokenPayload, expiresIn: string): string {
+function generateJwt(userInfo: TokenArgs, expiresIn: string): string {
 	const payload = {userId: userInfo.userId, companyId: userInfo.companyId};
 	const secret = JWT_PRIVATE_KEY;
 	const options: jwt.SignOptions = {

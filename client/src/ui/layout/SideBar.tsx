@@ -43,7 +43,7 @@ const SideBar: React.FC<SideBarProps> = ({
 					width: style.drawerWidth,
 				},
 			}}
-			variant="persistent"
+			variant="temporary"
 			anchor="right"
 			open={open}
 		>

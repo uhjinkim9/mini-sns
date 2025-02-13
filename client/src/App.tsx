@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 // 컴포넌트
 import Loading from "./ui/components/feedback/Loading";
+import Frame from "./ui/layout/Frame.tsx";
 
 // 페이지
 import Login from "./ui/pages/main/Login.tsx";
@@ -23,10 +24,7 @@ function App() {
 				<Suspense fallback={<Loading></Loading>}>
 					<Routes>
 						<Route path="/" element={<Login />} />
-						<Route
-							path="/*"
-							element={<>notfound 아님{/* { <Frame /> } */}</>}
-						/>
+						<Route path="/*" element={<Frame />} />
 					</Routes>
 				</Suspense>
 			</BrowserRouter>

@@ -5,6 +5,7 @@ import axios, {
 } from "axios";
 import {GATEWAY_URL} from "../../util/context/config";
 import {getItem} from "../context/localStorage";
+import {useNavigate} from "react-router-dom";
 
 const api: AxiosInstance = axios.create({
 	baseURL: GATEWAY_URL,
@@ -20,15 +21,14 @@ api.interceptors.request.use(
 		const accessToken = config.headers["Authorization"];
 		const refreshToken: string | null = getItem("refreshToken");
 		console.log("config", config);
-		console.log("GATEWAY_URL", GATEWAY_URL);
 
 		console.log(
-			`추후 SSO 인증서 적용 후 ${refreshToken}을 https only cookie에 저장`
+			`추후 SSO 인증서 적용 후 ${refreshToken}을 https only cookie에 저장,
+			또는 도커 저장 후 Redis에 저장`
 		);
 
 		// 액세스 토큰 있으면 헤더에 설정
 		if (accessToken) {
-			console.log("인터셉터에서 액세스 토큰 있음");
 			config.headers!.Authorization = `Bearer ${accessToken}`;
 			config.headers!.Refresh = `Bearer ${refreshToken}`; // 추후 인증서 적용 후 삭제
 		}
@@ -36,7 +36,6 @@ api.interceptors.request.use(
 		return config;
 	},
 	(error) => {
-		console.log("인터셉터 에러", error);
 		return Promise.reject(error);
 	}
 );
@@ -44,6 +43,16 @@ api.interceptors.request.use(
 // 응답 인터셉터
 api.interceptors.response.use(
 	(response: AxiosResponse) => {
+		switch (response.status) {
+			case 401:
+				console.error("인증되지 않은 요청");
+				const navigate = useNavigate();
+				navigate("/");
+				break;
+
+			case 404:
+				console.error("DB에 존재하는 정보 없음");
+		}
 		return response;
 	},
 	(error) => {

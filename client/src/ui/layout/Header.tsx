@@ -1,4 +1,5 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -6,18 +7,22 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import IconButton from "@mui/material/IconButton";
 
 import style from "./style/DrawerStyle";
+import {clearAll} from "../../util/context/localStorage";
 
-interface HeaderProps {
+// interface HeaderProps {
+// 	open: boolean;
+// 	handleDrawerOpen: () => void;
+// }
+
+const Header: React.FC<{
 	open: boolean;
 	handleDrawerOpen: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({open, handleDrawerOpen}) => {
+	isMobile: boolean;
+}> = ({open, handleDrawerOpen, isMobile}) => {
+	const navigate = useNavigate();
 	async function handleLogout() {
-		window.localStorage.clear();
-		window.location.href = "/";
-
-		// 로그아웃 기록 남기기: LoginManager
+		clearAll();
+		navigate("/");
 	}
 
 	return (
@@ -32,6 +37,17 @@ const Header: React.FC<HeaderProps> = ({open, handleDrawerOpen}) => {
 				>
 					Mini SNS
 				</Typography>
+
+				<IconButton
+					color="inherit"
+					aria-label="open drawer"
+					edge="start"
+					onClick={handleDrawerOpen}
+					sx={[open && {display: "none"}]}
+				>
+					<MenuIcon />
+				</IconButton>
+
 				<IconButton
 					color="inherit"
 					aria-label="logout"
@@ -40,15 +56,6 @@ const Header: React.FC<HeaderProps> = ({open, handleDrawerOpen}) => {
 					sx={[open && {display: "none"}]}
 				>
 					<LogoutIcon />
-				</IconButton>
-				<IconButton
-					color="inherit"
-					aria-label="open drawer"
-					edge="end"
-					onClick={handleDrawerOpen}
-					sx={[open && {display: "none"}]}
-				>
-					<MenuIcon />
 				</IconButton>
 			</Toolbar>
 		</style.AppBar>

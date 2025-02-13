@@ -12,6 +12,7 @@ interface BasicButtonProps {
 	disabled?: boolean; // 버튼 비활성화
 	href?: string; // 클릭 시 이동할 링크
 	disableElevation?: boolean; // 그림자 효과 비활성화
+	fullWidth?: boolean;
 	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // 클릭 이벤트
 }
 
@@ -22,6 +23,7 @@ export default function BasicButton(props: BasicButtonProps) {
 		disabled: disabled = false,
 		href: href = undefined,
 		disableElevation: disableElevation = false,
+		fullWidth: fullWidth = false,
 		onClick: onClick = null,
 	} = props;
 
@@ -38,6 +40,7 @@ export default function BasicButton(props: BasicButtonProps) {
 				href={href}
 				disabled={disabled}
 				disableElevation={disableElevation}
+				fullWidth={fullWidth}
 				onClick={handleClickButton}
 			>
 				{children}

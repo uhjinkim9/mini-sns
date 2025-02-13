@@ -14,7 +14,7 @@
 		},
 		{
 			"name": "Server-Auth Debegger",
-			"program": "${workspaceFolder}/server-auth/src/server.js",
+			"program": "${workspaceFolder}/server-auth/src/server.ts",
 			"request": "launch",
 			"skipFiles": ["<node_internals>/**"],
 			"type": "node",

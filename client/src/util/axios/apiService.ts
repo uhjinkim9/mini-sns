@@ -21,10 +21,7 @@ export const requestPost = async (
 	param: object = {}
 ): Promise<any> => {
 	try {
-		console.log("urlPrefix + url", urlPrefix + url);
-		console.log("param", param);
 		const response = await api.post(urlPrefix + url, param);
-		console.log("response", response);
 		return response.data;
 	} catch (error) {
 		console.error("POST 요청 에러:", error);

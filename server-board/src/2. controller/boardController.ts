@@ -1,6 +1,11 @@
-import boardService from "../service/boardService.js";
+import {Request, Response, NextFunction} from "express";
+import boardService from "@/3. service/boardService";
 
-async function getPages(req, res, next) {
+async function getPages(
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<Response> {
 	try {
 		const check = await boardService.selectPages();
 
@@ -10,11 +15,15 @@ async function getPages(req, res, next) {
 
 		return res.status(200).json(check);
 	} catch (err) {
-		res.status(500).json({message: "Internal Server Error"});
+		return res.status(500).json({message: "Internal Server Error"});
 	}
 }
 
-async function createContent(req, res, next) {
+async function createContent(
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<Response> {
 	try {
 		const {boardContent, userId} = req.body;
 		const check = await boardService.createContent(boardContent, userId);
@@ -25,11 +34,15 @@ async function createContent(req, res, next) {
 
 		return res.status(200).json(check);
 	} catch (err) {
-		res.status(500).json({message: "Internal Server Error"});
+		return res.status(500).json({message: "Internal Server Error"});
 	}
 }
 
-async function updateContent(req, res, next) {
+async function updateContent(
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<Response> {
 	try {
 		const {boardIdx, boardContent, userId} = req.body;
 		const check = await boardService.updateContent(
@@ -44,11 +57,15 @@ async function updateContent(req, res, next) {
 
 		return res.status(200).json(check);
 	} catch (err) {
-		res.status(500).json({message: "Internal Server Error"});
+		return res.status(500).json({message: "Internal Server Error"});
 	}
 }
 
-async function deleteContent(req, res, next) {
+async function deleteContent(
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<Response> {
 	try {
 		const {boardIdx} = req.body;
 		const check = await boardService.deleteContent(boardIdx);
@@ -59,11 +76,15 @@ async function deleteContent(req, res, next) {
 
 		return res.status(200).json(check);
 	} catch (err) {
-		res.status(500).json({message: "Internal Server Error"});
+		return res.status(500).json({message: "Internal Server Error"});
 	}
 }
 
-async function getContents(req, res, next) {
+async function getContents(
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<Response> {
 	try {
 		const check = await boardService.selectContents();
 
@@ -73,7 +94,7 @@ async function getContents(req, res, next) {
 
 		return res.status(200).json(check);
 	} catch (err) {
-		res.status(500).json({message: "Internal Server Error"});
+		return res.status(500).json({message: "Internal Server Error"});
 	}
 }
 
@@ -84,4 +105,5 @@ const boardController = {
 	deleteContent,
 	getContents,
 };
+
 export default boardController;

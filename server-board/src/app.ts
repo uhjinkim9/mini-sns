@@ -1,14 +1,14 @@
-/**
+/**********************
  * express 앱 설정 모듈
- */
+ **********************/
 
 import express from "express";
 import path from "path";
-import {fileURLToPath} from "url";
 
 import cors from "cors";
 
-import {CLIENT_URL, GATEWAY_URL} from "./context/config.js";
+import {CLIENT_URL, GATEWAY_URL} from "./0. util/context/config";
+import {getAppRootDir} from "./0. util/context/directory";
 
 const app = express();
 
@@ -19,19 +19,16 @@ app.use(express.urlencoded({extended: true}));
 // CORS 설정
 app.use(
 	cors({
-		origin: [CLIENT_URL, GATEWAY_URL],
+		origin: [CLIENT_URL || "", GATEWAY_URL || ""],
 		credentials: true,
 		// optionsSuccessStatus: 200,
 	})
 );
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // 정적 파일 제공
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(getAppRootDir(), "public")));
 
-import pageRoutes from "./routes/pageRoutes.js";
-app.use("/api/board", pageRoutes);
+import boardRoutes from "./1. router/boardRoutes";
+app.use("/api/board", boardRoutes);
 
 export default app;

@@ -64,6 +64,8 @@ export default function Frame() {
 			// lazy: 동적으로 import된 모듈을 받아 React 컴포넌트로 변환하는 역할
 			const LazyComponent = lazy(() =>
 				import(`../pages${pathName}.tsx`).then((module) => {
+					console.log(`../pages${pathName}.tsx`);
+
 					if (!module.default) {
 						throw new Error(
 							`Module ${pathName} does not have a default export`
