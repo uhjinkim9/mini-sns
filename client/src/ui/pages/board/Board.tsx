@@ -52,7 +52,7 @@ export default function Board() {
 			boardContent: boardCont,
 		};
 
-		// if (boardIdx) {
+		// if (boardIdx) { 커밋왜안돼
 		// 	if (contentEditRef.current) {
 		// 		content = contentEditRef.current.value;
 		// 	}
