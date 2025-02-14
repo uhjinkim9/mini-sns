@@ -6,12 +6,12 @@
 import http from "http";
 import path from "path";
 
-import sequelize from "./0. util/database/database";
+import sequelize from "./0_util/database/database";
 import app from "./app";
 
 // 모델 Import해야 DB에서 테이블 생성 수행
-import User from "./4. model/user";
-import UserToken from "./4. model/userToken";
+import User from "./4_model/user";
+import UserToken from "./4_model/userToken";
 
 const server = http.createServer(app);
 

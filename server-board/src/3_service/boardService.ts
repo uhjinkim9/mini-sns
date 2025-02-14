@@ -1,5 +1,5 @@
-import Page from "@/4. model/page";
-import BoardContent from "@/4. model/boardContent";
+import Page from "@/4_model/page";
+import BoardContent from "@/4_model/boardContent";
 
 interface BoardContentData {
 	boardContent: string;

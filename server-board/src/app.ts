@@ -7,8 +7,8 @@ import path from "path";
 
 import cors from "cors";
 
-import {CLIENT_URL, GATEWAY_URL} from "./0. util/context/config";
-import {getAppRootDir} from "./0. util/context/directory";
+import {CLIENT_URL, GATEWAY_URL} from "./0_util/context/config";
+import {getAppRootDir} from "./0_util/context/directory";
 
 const app = express();
 
@@ -28,7 +28,7 @@ app.use(
 // 정적 파일 제공
 app.use(express.static(path.join(getAppRootDir(), "public")));
 
-import boardRoutes from "./1. router/boardRoutes";
+import boardRoutes from "./1_router/boardRoutes";
 app.use("/api/board", boardRoutes);
 
 export default app;

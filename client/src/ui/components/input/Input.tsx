@@ -13,7 +13,6 @@ interface InputProps {
 	value?: any; // 입력 값
 	required?: boolean; // 필수 입력 여부
 	disabled?: boolean; // 입력 비활성화
-	// autoComplete는 뭐지? https://mui.com/material-ui/react-text-field/ 셀렉트박스 같은 거면 따로 컴포 추가하기
 	type?: "password" | "number" | "search";
 	slotProps?: {
 		input?: {

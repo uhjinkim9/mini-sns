@@ -37,18 +37,17 @@ async function verifyToken(req, res, next, actionParams) {
 	}
 
 	const authHeader = req.headers["authorization"];
-	// const userAgent = req.headers["user-agent"];
-	const accessToken = authHeader.split(" ")[1];
-
 	// 인증 헤더 없으면 오류 반환
 	if (!authHeader) {
 		return res.status(401).json({error: "Authorization header missing"}); // 프론트에서 로그인 페이지로 튕겨야 함❗
 	}
-
+	const accessToken = authHeader.split(" ")[1];
 	// 액세스 토큰 없으면 오류 반환
 	if (!accessToken) {
 		return res.status(401).json({error: "Access token missing"}); // 프론트에서 로그인 페이지로 튕겨야 함❗
 	}
+
+	// const userAgent = req.headers["user-agent"];
 
 	// 인증 헤더 있으면 액세스 토큰 검증
 	jwt.verify(accessToken, JWT_PUBLIC_KEY, (err, decoded) => {
@@ -97,7 +96,7 @@ async function verifyToken(req, res, next, actionParams) {
 		// 만료 1분 전, 발급 시각 5분 경과 시 갱신
 		if (
 			exp - now < bufferTime &&
-			// now - iat > bufferTime * 5 &&
+			now - iat > 10 && // 10초(테스트)
 			actionParams.enableRefresh
 		) {
 			console.log("액세스 여전히 유효, 발급 후 5분 경과 ➡️ 토큰 갱신");

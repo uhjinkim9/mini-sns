@@ -11,8 +11,8 @@ import Button from "../../components/input/Button";
 
 import {requestPost} from "../../../util/axios/apiService";
 import {isEmpty} from "../../../util/validator/emptyCheck";
-
-import {setItem} from "../../../util/context/localStorage";
+import {LocalStorage} from "../../../util/context/storage";
+import {useAlert} from "../../../util/hook/useAlert";
 
 interface LoginInfo {
 	userId: string;
@@ -27,6 +27,7 @@ export default function Login() {
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // 화면이 `sm` (600px 이하)일 경우 true
+	const {showAlert} = useAlert();
 
 	const [loginInfo, setLoginInfo] = useState<LoginInfo>({
 		userId: "",
@@ -43,9 +44,11 @@ export default function Login() {
 
 	async function submitLogin() {
 		if (isEmpty(loginInfo.userId)) {
+			showAlert("warning", "Please enter your ID.");
 			return;
 		}
 		if (isEmpty(loginInfo.userPw)) {
+			showAlert("warning", "Please enter your PW.");
 			return;
 		}
 
@@ -75,10 +78,10 @@ export default function Login() {
 		userId: string,
 		companyId: string
 	) {
-		setItem("accessToken", accessToken);
-		setItem("refreshToken", refreshToken);
-		setItem("userId", userId);
-		setItem("companyId", companyId);
+		LocalStorage.setItem("accessToken", accessToken);
+		LocalStorage.setItem("refreshToken", refreshToken);
+		LocalStorage.setItem("userId", userId);
+		LocalStorage.setItem("companyId", companyId);
 	}
 
 	return (
@@ -100,7 +103,7 @@ export default function Login() {
 						? "none"
 						: "0px 4px 10px rgba(0, 0, 0, 0.1)",
 					borderRadius: "8px",
-					margin: "auto",
+					// margin: "auto",
 				}}
 				noValidate
 				autoComplete="off"
@@ -120,6 +123,7 @@ export default function Login() {
 					onChange={handleInputChange}
 					name="userId"
 					value={loginInfo.userId}
+					slotProps={{inputLabel: {shrink: true}}}
 				/>
 				<Input
 					variant="outlined"
@@ -129,6 +133,7 @@ export default function Login() {
 					onChange={handleInputChange}
 					name="userPw"
 					value={loginInfo.userPw}
+					slotProps={{inputLabel: {shrink: true}}}
 				/>
 				<Button variant="contained" fullWidth onClick={submitLogin}>
 					로그인

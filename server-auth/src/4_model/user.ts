@@ -1,5 +1,5 @@
 import {DataTypes, Model, Optional} from "sequelize";
-import sequelize from "../0. util/database/database"; // DB 연결
+import sequelize from "../0_util/database/database"; // DB 연결
 
 export interface UserAttributes {
 	companyId: string;

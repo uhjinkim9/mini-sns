@@ -1,10 +1,10 @@
 import jwt, {Algorithm} from "jsonwebtoken";
 import {Request, Response} from "express";
 
-import {JWT_PRIVATE_KEY, JWT_PUBLIC_KEY} from "@/0. util/context/config";
-import password from "@/0. util/validator/password";
-import authService from "@/3. service/authService";
-import {LoginInfo, TokenArgs} from "../5. dto/user.interface";
+import {JWT_PRIVATE_KEY, JWT_PUBLIC_KEY} from "@/0_util/context/config";
+import password from "@/0_util/validator/password";
+import authService from "@/3_service/authService";
+import {LoginInfo, TokenArgs} from "../5_dto/user.interface";
 
 // 테스트용으로 짧게
 const expiresInAccess = "10s";

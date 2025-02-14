@@ -1,4 +1,4 @@
-import {createContext, useState, useContext, ReactNode} from "react";
+import {createContext, useState, useContext, ReactNode, JSX} from "react";
 import Alert from "@mui/material/Alert";
 import CheckIcon from "@mui/icons-material/Check";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -7,14 +7,12 @@ import InfoIcon from "@mui/icons-material/Info";
 import Stack from "@mui/material/Stack";
 import {AlertColor} from "@mui/material";
 
-// ✅ Alert 상태 타입 정의
 interface AlertConfig {
 	visible: boolean;
 	severity: AlertColor;
 	message: string;
 }
 
-// ✅ AlertContext 타입 정의
 interface AlertContextType {
 	showAlert: (
 		severity: AlertColor,
@@ -23,7 +21,7 @@ interface AlertContextType {
 	) => void;
 }
 
-// ✅ 컨텍스트 전역 생성 (export 추가)
+// `AlertContext`를 export 추가하여 사용 가능하게 설정
 export const AlertContext = createContext<AlertContextType | undefined>(
 	undefined
 );
@@ -32,7 +30,7 @@ interface AlertProviderProps {
 	children: ReactNode;
 }
 
-export function AlertProvider({children}: AlertProviderProps) {
+export function AlertProvider({children}: AlertProviderProps): JSX.Element {
 	const [alertConfig, setAlertConfig] = useState<AlertConfig>({
 		visible: false,
 		severity: "info",
@@ -49,35 +47,37 @@ export function AlertProvider({children}: AlertProviderProps) {
 	}
 
 	return (
-		<AlertContext.Provider value={{showAlert}}>
-			{children}
-			{alertConfig.visible && (
-				<Stack
-					sx={(theme) => ({
-						width: "90%",
-						maxWidth: "400px",
-						position: "fixed",
-						top: "20px",
-						left: "50%",
-						transform: "translateX(-50%)",
-						zIndex: theme.zIndex.modal + 1, // ✅ zIndex 오류 해결
-					})}
-					spacing={2}
-				>
-					<Alert
-						severity={alertConfig.severity}
-						variant="filled"
-						icon={getAlertIcon(alertConfig.severity)}
+		<>
+			<AlertContext.Provider value={{showAlert}}>
+				{children}
+				{alertConfig.visible && (
+					<Stack
+						sx={(theme) => ({
+							width: "90%",
+							maxWidth: "400px",
+							position: "fixed",
+							top: "20px",
+							left: "50%",
+							transform: "translateX(-50%)",
+							zIndex: theme.zIndex.modal + 1, // ✅ zIndex 오류 해결
+						})}
+						spacing={2}
 					>
-						{alertConfig.message}
-					</Alert>
-				</Stack>
-			)}
-		</AlertContext.Provider>
+						<Alert
+							severity={alertConfig.severity}
+							variant="filled"
+							icon={getAlertIcon(alertConfig.severity)}
+						>
+							{alertConfig.message}
+						</Alert>
+					</Stack>
+				)}
+			</AlertContext.Provider>
+		</>
 	);
 }
 
-// ✅ 전역적으로 showAlert을 쉽게 사용하기 위한 Custom Hook
+// 전역적으로 showAlert을 쉽게 사용하기 위한 Custom Hook
 export function useAlert(): AlertContextType {
 	const context = useContext(AlertContext);
 	if (!context) {

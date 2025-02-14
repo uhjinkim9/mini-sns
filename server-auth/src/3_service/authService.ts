@@ -1,7 +1,7 @@
-import User from "@/4. model/user";
-import UserToken from "@/4. model/userToken";
-import {UserAttributes} from "@/4. model/user";
-import {Token} from "@/5. dto/user.interface";
+import User from "@/4_model/user";
+import UserToken from "@/4_model/userToken";
+import {UserAttributes} from "@/4_model/user";
+import {Token} from "@/5_dto/user.interface";
 
 async function findUser(userId: string): Promise<UserAttributes | null> {
 	const user = await User.findOne({

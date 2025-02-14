@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import boardService from "@/3. service/boardService";
+import boardService from "@/3_service/boardService";
 
 async function getPages(
 	req: Request,
@@ -13,6 +13,7 @@ async function getPages(
 			return res.status(401).json({message: "Page not found"});
 		}
 
+		console.log("!!!!!!check: ", check);
 		return res.status(200).json(check);
 	} catch (err) {
 		return res.status(500).json({message: "Internal Server Error"});

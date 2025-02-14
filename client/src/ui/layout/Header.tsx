@@ -7,7 +7,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import IconButton from "@mui/material/IconButton";
 
 import style from "./style/DrawerStyle";
-import {clearAll} from "../../util/context/localStorage";
+import {LocalStorage, Cookies} from "../../util/context/storage";
+import axios from "axios";
 
 // interface HeaderProps {
 // 	open: boolean;
@@ -18,16 +19,18 @@ const Header: React.FC<{
 	open: boolean;
 	handleDrawerOpen: () => void;
 	isMobile: boolean;
-}> = ({open, handleDrawerOpen, isMobile}) => {
+}> = ({open, handleDrawerOpen}) => {
 	const navigate = useNavigate();
+
 	async function handleLogout() {
-		clearAll();
+		delete axios.defaults.headers.common["Authorization"]; // 만약 axios에 기본으로 Authorization을 설정한 경우 제거
+		Cookies.clearAll();
+		LocalStorage.clearAll();
 		navigate("/");
 	}
 
 	return (
 		<style.AppBar position="fixed" open={open}>
-			{/* <TokenRefresher /> */}
 			<Toolbar>
 				<Typography
 					variant="h6"

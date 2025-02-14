@@ -8,8 +8,6 @@
 
 import api from "./axiosInstance";
 
-const urlPrefix = "/api";
-
 /**
  * 서버와 통신하는 POST 요청 함수
  * @param url 접근하고자 하는 URL
@@ -21,7 +19,7 @@ export const requestPost = async (
 	param: object = {}
 ): Promise<any> => {
 	try {
-		const response = await api.post(urlPrefix + url, param);
+		const response = await api.post(url, param);
 		return response.data;
 	} catch (error) {
 		console.error("POST 요청 에러:", error);
@@ -36,7 +34,7 @@ export const requestPost = async (
  */
 export const requestGet = async (url: string): Promise<any> => {
 	try {
-		const response = await api.get(urlPrefix + url);
+		const response = await api.get(url);
 		return response.data;
 	} catch (error) {
 		console.error("GET 요청 에러:", error);

@@ -1,5 +1,5 @@
 import {DataTypes, Model, Optional} from "sequelize";
-import sequelize from "@/0. util/database/database";
+import sequelize from "@/0_util/database/database";
 
 interface BoardContentAttributes {
 	idx: number;
@@ -43,7 +43,7 @@ BoardContent.init(
 	},
 	{
 		sequelize,
-		tableName: "boardContent",
+		modelName: "boardContent",
 		comment: "게시물 정보",
 		timestamps: true,
 	}

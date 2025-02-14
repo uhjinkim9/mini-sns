@@ -1,7 +1,7 @@
 import express from "express";
 
-import authController from "../2. controller/authController";
-import asyscRequestHandler from "../0. util/context/asyncRequestHandler";
+import authController from "../2_controller/authController";
+import asyscRequestHandler from "../0_util/context/asyncRequestHandler";
 
 const router = express.Router();
 

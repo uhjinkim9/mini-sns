@@ -1,7 +1,7 @@
 import express from "express";
 
-import boardController from "../2. controller/boardController";
-import asyscRequestHandler from "../0. util/context/asyncRequestHandler";
+import boardController from "../2_controller/boardController";
+import asyscRequestHandler from "../0_util/context/asyncRequestHandler";
 
 const router = express.Router();
 

@@ -20,7 +20,7 @@ const PersistentDrawerRight: React.FC<PersistentDrawerRightProps> = ({
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // 600px 이하일 때 true
 
-	const [open, setOpen] = useState(!isMobile); // 모바일에서는 기본적으로 닫힘
+	const [open, setOpen] = useState(isMobile); // 모바일에서는 기본적으로 닫힘
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -34,7 +34,7 @@ const PersistentDrawerRight: React.FC<PersistentDrawerRightProps> = ({
 		<Box sx={{display: "flex"}}>
 			<CssBaseline />
 
-			{/* ✅ 모바일일 때 헤더의 Drawer 버튼 변경 */}
+			{/* 모바일일 때 헤더의 Drawer 버튼 변경 */}
 			<Header
 				open={open}
 				handleDrawerOpen={handleDrawerOpen}
@@ -49,7 +49,7 @@ const PersistentDrawerRight: React.FC<PersistentDrawerRightProps> = ({
 				onClickSideMenu={onClickSideMenu}
 			/>
 
-			{/* ✅ 모바일일 때 사이드바가 닫히면 마진 제거 */}
+			{/* 모바일일 때 사이드바가 닫히면 마진 제거 */}
 			<style.Main open={open && !isMobile}>
 				<style.DrawerHeader />
 			</style.Main>

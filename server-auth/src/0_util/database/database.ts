@@ -6,7 +6,7 @@ import {
 	DB_USER,
 	DB_PASSWORD,
 	DB_NAME,
-} from "@/0. util/context/config";
+} from "@/0_util/context/config";
 
 if (!DB_NAME || !DB_USER || !DB_PASSWORD) {
 	console.error("DB 환경변수가 설정되지 않았습니다. .env 파일을 확인하세요.");

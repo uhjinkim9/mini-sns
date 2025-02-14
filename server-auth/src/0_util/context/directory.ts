@@ -19,3 +19,6 @@ export function getRootDir(): string {
 export function getAppRootDir(): string {
 	return resolve("..", __pwdPath, "server-auth");
 }
+
+console.log(getRootDir());
+console.log(getAppRootDir());
