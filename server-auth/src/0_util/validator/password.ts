@@ -2,36 +2,36 @@
  * 비밀번호 해시화, 검증하는 함수
  *******************************/
 
-import {scrypt, randomBytes} from "crypto";
-import {promisify} from "util";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
 
 const scryptAsync = promisify(scrypt);
 
 const password = {
-	/**
-	 * 비밀번호 해시화 함수
-	 * @param pw 가입 시 입력되는 비밀번호
-	 * @return 해시화된 비밀번호
-	 */
-	toHash: async (pw: string): Promise<string> => {
-		const salt = randomBytes(8).toString("hex");
-		const buf = (await scryptAsync(pw, salt, 64)) as Buffer;
+  /**
+   * 비밀번호 해시화 함수
+   * @param pw 가입 시 입력되는 비밀번호
+   * @returns 해시화된 비밀번호
+   */
+  toHash: async (pw: string): Promise<string> => {
+    const salt = randomBytes(8).toString("hex");
+    const buf = (await scryptAsync(pw, salt, 64)) as Buffer;
 
-		return `${buf.toString("hex")}.${salt}`;
-	},
+    return `${buf.toString("hex")}.${salt}`;
+  },
 
-	/**
-	 * 비밀번호 검증 함수
-	 * @param storedPw DB에 저장된 해시 비밀번호
-	 * @param suppliedPw 입력된 비밀번호
-	 * @return 비밀번호 일치 여부
-	 */
-	compare: async (storedPw: string, suppliedPw: string): Promise<boolean> => {
-		const [hashedPw, salt] = storedPw.split(".");
-		const buf = (await scryptAsync(suppliedPw, salt, 64)) as Buffer;
+  /**
+   * 비밀번호 검증 함수
+   * @param storedPw DB에 저장된 해시 비밀번호
+   * @param suppliedPw 입력된 비밀번호
+   * @returns 비밀번호 일치 여부
+   */
+  compare: async (storedPw: string, suppliedPw: string): Promise<boolean> => {
+    const [hashedPw, salt] = storedPw.split(".");
+    const buf = (await scryptAsync(suppliedPw, salt, 64)) as Buffer;
 
-		return buf.toString("hex") === hashedPw;
-	},
+    return buf.toString("hex") === hashedPw;
+  },
 };
 
 // password.toHash("1234").then((h) => {

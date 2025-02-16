@@ -7,19 +7,19 @@
  * router.post("/login", asyscRequestHandler(authController.doLogin));
  *******************************************************************************/
 
-import {Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 
 /**
  * 컨트롤러의 함수를 인자로 받아 에러 캐치하는 미들웨어 함수
  * @param fn 컨트롤러의 함수
- * @return 에러를 캐치하는 next 함수
+ * @returns 에러를 캐치하는 next 함수
  */
 const asyncRequestHandler = (
-	fn: (req: Request, res: Response, next: NextFunction) => Promise<Response>
+  fn: (req: Request, res: Response, next: NextFunction) => Promise<Response>
 ) => {
-	return (req: Request, res: Response, next: NextFunction) => {
-		fn(req, res, next).catch(next);
-	};
+  return (req: Request, res: Response, next: NextFunction) => {
+    fn(req, res, next).catch(next);
+  };
 };
 
 export default asyncRequestHandler;

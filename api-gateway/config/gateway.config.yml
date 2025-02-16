@@ -1,89 +1,89 @@
 http:
-    port: 5001 # 게이트웨이 실행 포트
+  port: 5001 # 게이트웨이 실행 포트
 
 # admin:
 #   port: 9876
 #   host: localhost
 
 apiEndpoints:
-    authApi:
-        host: "*" # 배포 시에는 특정 호스트로 제한해야 함
-        paths: "/api/auth/*"
-    boardApi:
-        host: "*"
-        paths: "/api/board/*"
+  authApi:
+    host: "*" # 배포 시에는 특정 호스트로 제한해야 함
+    paths: "/api/auth/*"
+  boardApi:
+    host: "*"
+    paths: "/api/board/*"
 
 serviceEndpoints:
-    authService:
-        url: "http://localhost:5002" # AUTH 서비스 URL
-    boardService:
-        url: "http://localhost:5003" # BOARD 서비스 URL
+  authService:
+    url: "http://localhost:5002" # AUTH 서비스 URL
+  boardService:
+    url: "http://localhost:5003" # BOARD 서비스 URL
 
 policies:
-    - cors
-    - log
-    - proxy
-    - jwt-policy
-    # - jwt // jwt-policy(custom) also executes jwt verification
-    # - basic-auth
-    # - expression
-    # - key-auth
-    # - oauth2
-    # - rate-limit
+  - cors
+  - log
+  - proxy
+  #   - jwt-policy
+  - jwt
+  # - basic-auth
+  # - expression
+  # - key-auth
+  # - oauth2
+  # - rate-limit
 
 pipelines:
-    authPipeline:
-        apiEndpoints:
-            - authApi
-        policies:
-            - log:
-                  action:
-                      message: "Auth request received"
-            - cors: # 맨 위 배치
-                  action:
-                      origin: ["http://localhost:5000"]
-                      credentials: true
-                      methods: "GET, POST, PUT, DELETE, OPTIONS"
-                      allowedHeaders: ["Authorization", "Content-type"]
-                      exposedHeaders: ["Authorization"]
-                      preflightContinue: false
-                      optionsSuccessStatus: 204
+  authPipeline:
+    apiEndpoints:
+      - authApi
+    policies:
+      - log:
+          action:
+            message: "Auth request received"
+      - cors: # 맨 위 배치
+          action:
+            origin: ["http://localhost:5000"]
+            credentials: true
+            methods: "GET, POST, PUT, DELETE, OPTIONS"
+            allowedHeaders: ["Authorization", "Content-type"]
+            exposedHeaders: ["Authorization"]
+            preflightContinue: false
+            optionsSuccessStatus: 204
 
-            - proxy:
-                  action:
-                      serviceEndpoint: authService
-                      changeOrigin: true
+      - proxy:
+          action:
+            serviceEndpoint: authService
+            changeOrigin: true
 
-    boardPipeline:
-        apiEndpoints:
-            - boardApi
-        policies:
-            - log:
-                  action:
-                      message: "Board request received with method: ${req.method} and path: ${req.path}"
-            - cors: # 맨 위 배치
-                  action:
-                      origin: ["http://localhost:5000"]
-                      credentials: true
-                      methods: "GET, POST, PUT, DELETE, OPTIONS"
-                      allowedHeaders: ["Authorization", "Content-type"]
-                      exposedHeaders: ["Authorization"]
-                      preflightContinue: false
-                      optionsSuccessStatus: 204
-            # - jwt:
-            #       action:
-            #           secretOrPublicKeyFile: ../keys/public.pem # JWT 검증
-            #           checkCredentialExistence: false
-            #           passThrough:
-            #               action:
-            #                   redirect:
-            #                       statusCode: 307
-            #                       url: "/"
-            - jwt-policy:
-                  action:
-                      enableRefresh: true
+  boardPipeline:
+    apiEndpoints:
+      - boardApi
+    policies:
+      - log:
+          action:
+            message: "Board request received with method: ${req.method} and path: ${req.path}"
+      - cors: # 맨 위 배치
+          action:
+            origin: ["http://localhost:5000"]
+            credentials: true
+            methods: "GET, POST, PUT, DELETE, OPTIONS"
+            allowedHeaders: ["Authorization", "Content-type"]
+            exposedHeaders: ["Authorization"]
+            preflightContinue: false
+            optionsSuccessStatus: 204
+      - jwt:
+          action:
+            secretOrPublicKeyFile: ../keys/public.pem # JWT 검증
+            checkCredentialExistence: true
+            # passThrough:
+            #   action:
+            #     cache:
+            #     enabled: true # JWT 검증 결과 캐싱 활성화
+            #     ttlSeconds: 5 # 5초 동안 캐싱 유지
+      # - jwt-policy:
+      #       action:
+      #           enableRefresh: true
 
-            - proxy:
-                  action:
-                      serviceEndpoint: boardService
-                      changeOrigin: true
+      - proxy:
+          action:
+            serviceEndpoint: boardService
+            changeOrigin: true
