@@ -3,4 +3,3 @@
  **************************************/
 
 export const GATEWAY_URL: string | undefined = import.meta.env.VITE_GATEWAY_URL;
-console.log(GATEWAY_URL);

@@ -15,28 +15,28 @@ import BoardContent from "./4_model/boardContent";
 const server = http.createServer(app);
 
 sequelize
-	// .sync()
-	.sync({force: true}) // WARNING: DB Reset
-	.then(() => {
-		return Page.bulkCreate([
-			{
-				pageGroup: "main",
-				pageNm: "Main",
-				creator: "admin",
-			},
-			{
-				pageGroup: "board",
-				pageNm: "Board",
-				creator: "admin",
-			},
-		]);
-	})
+	.sync()
+	// .sync({force: true}) // WARNING: DB Reset
+	// .then(() => {
+	// 	return Page.bulkCreate([
+	// 		{
+	// 			pageGroup: "main",
+	// 			pageNm: "Main",
+	// 			creator: "admin",
+	// 		},
+	// 		{
+	// 			pageGroup: "board",
+	// 			pageNm: "Board",
+	// 			creator: "admin",
+	// 		},
+	// 	]);
+	// })
 	.then(() => {
 		return Page.findAll();
 	})
 	.then(() => {
 		server.listen(5003, () => {
-			console.log("the board server is running on 5002");
+			console.log("the board server is running on 5003");
 		});
 	})
 	.catch((err: any) => {

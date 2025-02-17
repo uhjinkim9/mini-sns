@@ -26,10 +26,12 @@ const privateKeyPath = path.resolve(
 	rootDir,
 
 	path.join("..", "keys", "private.pem")
+	// path.join("keys", "private.pem")
 );
 const publicKeyPath = path.resolve(
 	rootDir,
 	path.join("..", "keys", "public.pem")
+	// path.join("keys", "public.pem")
 );
 
 const privateKey = fs.readFileSync(privateKeyPath, "utf8");
