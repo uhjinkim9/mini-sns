@@ -9,8 +9,7 @@
 			"program": "${workspaceFolder}/api-gateway/server.js",
 			"request": "launch",
 			"skipFiles": ["<node_internals>/**"],
-			"type": "node",
-			"restart": true
+			"type": "node"
 		},
 		{
 			"name": "Server-Auth Debegger",
@@ -24,7 +23,8 @@
 				"DB_PORT": "38936",
 				"DB_USER": "pmis",
 				"DB_PASSWORD": "pmis0408!"
-			}
+			},
+			"restart": true
 		}
 	]
 }

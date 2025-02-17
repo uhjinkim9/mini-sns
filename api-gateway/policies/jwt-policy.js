@@ -7,6 +7,7 @@ dotenv.config();
 const REFRESH_TOKEN_URL = "http://localhost:5002/api/auth/renewAccessToken";
 
 // PEM 파일 읽기
+// const publicKeyPath = path.resolve(path.join("keys", "public.pem"));
 const publicKeyPath = path.resolve(path.join("..", "keys", "public.pem"));
 const publicKey = fs.readFileSync(publicKeyPath, "utf8");
 const JWT_PUBLIC_KEY = publicKey;

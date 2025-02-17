@@ -10,10 +10,11 @@ async function getPages(
 		const check = await boardService.selectPages();
 
 		if (!check) {
-			return res.status(401).json({message: "Page not found"});
+			return res.status(204).json({message: "Page not found"});
 		}
 
-		console.log("!!!!!!check: ", check);
+		console.log("Received headers:", req.headers);
+
 		return res.status(200).json(check);
 	} catch (err) {
 		return res.status(500).json({message: "Internal Server Error"});

@@ -23,7 +23,9 @@ export default function Frame() {
 		const url = "/board/getPages";
 		try {
 			const res = await requestPost(url);
-			setPages(res);
+			if (res) {
+				setPages(res);
+			}
 		} catch (err) {
 			console.error(err);
 		}
@@ -63,8 +65,6 @@ export default function Frame() {
 		// lazy: 동적으로 import된 모듈을 받아 React 컴포넌트로 변환하는 역할
 		const LazyComponent = lazy(() =>
 			import(`../pages${pathName}`).then((module) => {
-				console.log(`${pathName}`);
-
 				if (!module.default) {
 					throw new Error(
 						`Module ${pathName} does not have a default export`

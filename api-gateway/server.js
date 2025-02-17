@@ -2,7 +2,6 @@ const path = require("path");
 const gateway = require("express-gateway");
 const express = require("express");
 const {createProxyMiddleware} = require("http-proxy-middleware");
-const jwtAuthorizer = require("./policies/jwt-policy");
 
 const app = express();
 
