@@ -10,7 +10,6 @@ import {styled} from "@mui/material/styles";
 import Input from "../../components/input/Input";
 import Button from "../../components/input/Button";
 
-import {LocalStorage} from "../../../util/context/storage";
 import {isEmpty} from "../../../util/validator/emptyCheck";
 import {requestPost} from "../../../util/axios/apiService";
 import {useAlert} from "../../../util/hook/useAlert";
@@ -36,7 +35,7 @@ const Item = styled(Paper)(({theme}) => ({
 export default function Board() {
 	const {showAlert} = useAlert();
 
-	const userId: string | null = LocalStorage.getItem("userId");
+	const userId: string | null = localStorage.getItem("userId");
 	const [conts, setConts] = useState<BoardContent[]>([]);
 	const [boardCont, setBoardCont] = useState<string>("");
 	const isMounted = useIsMounted();

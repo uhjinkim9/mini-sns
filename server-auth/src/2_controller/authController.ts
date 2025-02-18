@@ -9,9 +9,9 @@ import {LoginInfo, TokenArgs} from "../5_dto/user.interface";
 import userService from "@/3_service/userService";
 import tokenService from "@/3_service/tokenService";
 
-// 테스트용으로 짧게
-const expiresInAccess = "10s";
-const expiresInRefresh = "20s";
+// 토큰 유효시간
+const expiresInAccess = "30m";
+const expiresInRefresh = "7d";
 
 const authController = {
 	/**

@@ -4,7 +4,7 @@ import axios, {
 	AxiosResponse,
 } from "axios";
 import {GATEWAY_URL} from "../../util/context/config";
-import {LocalStorage, CookieStorage} from "../context/storage";
+import {CookieStorage} from "../context/storage";
 import {isEmpty} from "../validator/emptyCheck";
 
 const baseURL = GATEWAY_URL + "/api";
@@ -20,15 +20,15 @@ const api: AxiosInstance = axios.create({
 // 요청 인터셉터
 api.interceptors.request.use(
 	async (config: InternalAxiosRequestConfig) => {
-		const accessToken: string | null = LocalStorage.getItem("accessToken");
+		const accessToken: string | null = localStorage.getItem("accessToken");
 		if (accessToken) {
 			config.headers.Authorization = `Bearer ${accessToken}`;
 		}
 
 		if (!config.data) {
 			config.data = {};
-			config.data.userId = LocalStorage.getItem("userId");
-			config.data.companyId = LocalStorage.getItem("companyId");
+			config.data.userId = localStorage.getItem("userId");
+			config.data.companyId = localStorage.getItem("companyId");
 		}
 		return config;
 	},
@@ -55,7 +55,7 @@ api.interceptors.response.use(
 
 			const refreshToken = CookieStorage.getItem("refreshToken");
 			if (isEmpty(refreshToken)) {
-				LocalStorage.clearAll();
+				localStorage.clear();
 				return Promise.reject("리프레시 토큰 없음, 로그아웃 처리");
 			}
 			try {
@@ -70,8 +70,7 @@ api.interceptors.response.use(
 					{withCredentials: true}
 				);
 
-				console.log(data);
-				LocalStorage.setItem("accessToken", data.accessToken);
+				localStorage.setItem("accessToken", data.accessToken);
 				CookieStorage.setItem(
 					"refreshToken",
 					data.refreshToken,
@@ -83,8 +82,8 @@ api.interceptors.response.use(
 				return api(originalRequest);
 			} catch (refreshError) {
 				console.log("refreshError:", refreshError);
-				// LocalStorage.removeItem("accessToken"); // 토큰 제거
-				// window.location.href = "/"; // 로그인 페이지로 이동
+				localStorage.removeItem("accessToken"); // 토큰 제거
+				window.location.href = "/"; // 로그인 페이지로 이동
 				return Promise.reject(refreshError);
 			}
 		}
@@ -93,12 +92,12 @@ api.interceptors.response.use(
 		//   case 204:
 		//     console.error("해당 ID의 사용자 정보 없음");
 		//		alert('회원 정보가 없습니다.');
-		//     LocalStorage.clearAll();
+		//     localStorage.clearAll();
 		//     break;
 
 		//   case 401:
 		//     console.error("인증되지 않은 요청");
-		//     LocalStorage.clearAll();
+		//     localStorage.clearAll();
 		//     window.location.href = "/";
 		//     break;
 

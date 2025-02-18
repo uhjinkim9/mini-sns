@@ -67,19 +67,19 @@ pipelines:
                       exposedHeaders: ["Authorization"]
                       preflightContinue: false
                       optionSuccessStatus: 204
-            - log:
-                  action:
-                      message: "🔍 JWT 검증 시작 - Authorization 헤더: ${req.headers.authorization}"
+            # - log:
+            #       action:
+            #   message: "🔍 JWT 검증 시작 - Authorization 헤더: ${req.headers.authorization}"
             - jwt:
                   action:
                       secretOrPublicKeyFile: ../keys/public.pem # JWT 검증
-                      checkCredentialExistence: true
+                      checkCredentialExistence: false
                       allowAuthorizationHeaderPrefix: true # Bearer 접두사 픽스 여부
-                      #   allowExpiredTokens: false # 만료된 토큰 허용 여부
+                      allowExpiredTokens: false # 만료된 토큰 허용 여부
                       ignoredMethods: ["OPTIONS"] # OPTIONS Preflight 요청이 boardService로 전달되지 않고, 게이트웨이에서 직접 응답을 반환
-            - log:
-                  action:
-                      message: "✅ JWT 검증 완료"
+            # - log:
+            #       action:
+            #           message: "✅ JWT 검증 완료"
 
             - proxy:
                   action:

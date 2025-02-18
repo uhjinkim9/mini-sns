@@ -11,7 +11,7 @@ import Button from "../../components/input/Button";
 
 import {requestPost} from "../../../util/axios/apiService";
 import {isEmpty} from "../../../util/validator/emptyCheck";
-import {LocalStorage, CookieStorage} from "../../../util/context/storage";
+import {CookieStorage} from "../../../util/context/storage";
 import {useAlert} from "../../../util/hook/useAlert";
 
 interface LoginInfo {
@@ -77,13 +77,13 @@ export default function Login() {
 		userId: string,
 		companyId: string
 	) {
-		// const expires = new Date(Date.now() + 60 * 60 * 24 * 7 * 1000); // 7일 후 만료
-		const expires = new Date(Date.now() + 20 * 1000); // 20초 후 만료
+		const expires = new Date(Date.now() + 60 * 60 * 24 * 7 * 1000); // 7일 후 만료
+		// const expires = new Date(Date.now() + 20 * 1000); // 20초 후 만료
 
 		CookieStorage.setItem("refreshToken", refreshToken, expires);
-		LocalStorage.setItem("accessToken", accessToken);
-		LocalStorage.setItem("userId", userId);
-		LocalStorage.setItem("companyId", companyId);
+		localStorage.setItem("accessToken", accessToken);
+		localStorage.setItem("userId", userId);
+		localStorage.setItem("companyId", companyId);
 	}
 
 	return (
