@@ -76,7 +76,7 @@ pipelines:
                       checkCredentialExistence: true
                       allowAuthorizationHeaderPrefix: true # Bearer 접두사 픽스 여부
                       #   allowExpiredTokens: false # 만료된 토큰 허용 여부
-                      #   ignoredMethods: ["OPTIONS"] # OPTIONS Preflight 요청이 boardService로 전달되지 않고, 게이트웨이에서 직접 응답을 반환
+                      ignoredMethods: ["OPTIONS"] # OPTIONS Preflight 요청이 boardService로 전달되지 않고, 게이트웨이에서 직접 응답을 반환
             - log:
                   action:
                       message: "✅ JWT 검증 완료"

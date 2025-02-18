@@ -1,6 +1,7 @@
 /***************************************************
  * 저장소에 객체를 저장, 조회, 삭제하는 함수
  * 객체를 포함한 어느 데이터든 저장 가능
+ * 주의: string은 ""를 포함하여 저장
  *
  * 종류: 로컬 스토리지, 세션 스토리지, 쿠키
  ***************************************************/
@@ -17,8 +18,9 @@ export const LocalStorage = {
 	 */
 	setItem: (key: string, value: any): void => {
 		try {
-			const jsonValue = JSON.stringify(value);
-			localStorage.setItem(key, jsonValue);
+			// const jsonValue = JSON.stringify(value);
+			// localStorage.setItem(key, jsonValue);
+			localStorage.setItem(key, value);
 		} catch (error) {
 			console.error("로컬스토리지 저장 오류:", error);
 		}
@@ -30,10 +32,12 @@ export const LocalStorage = {
 	 * @param key 불러올 데이터의 키
 	 * @returns 저장된 데이터
 	 */
-	getItem: <T>(key: string): T | null => {
+	getItem: (key: string): any => {
 		try {
-			const value = localStorage.getItem(key);
-			return value ? JSON.parse(value) : null;
+			// const value = localStorage.getItem(key);
+			// return value ? JSON.parse(value) : null;
+
+			return localStorage.getItem(key);
 		} catch (error) {
 			console.error("로컬스토리지 조회 오류:", error);
 			return null;
