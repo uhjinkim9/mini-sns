@@ -4,10 +4,10 @@ const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const REFRESH_TOKEN_URL = "http://localhost:5002/api/auth/renewAccessToken";
+const REFRESH_TOKEN_URL = process.env.REFRESH_TOKEN_URL;
 
 // PEM 파일 읽기
-// const publicKeyPath = path.resolve(path.join("keys", "public.pem"));
+// const publicKeyPath = path.resolve(path.join("keys", "public.pem")); // 디버거 실행 시
 const publicKeyPath = path.resolve(path.join("..", "keys", "public.pem"));
 const publicKey = fs.readFileSync(publicKeyPath, "utf8");
 const JWT_PUBLIC_KEY = publicKey;
@@ -170,9 +170,10 @@ async function refreshToken(req, res, next, accessToken, userId, companyId) {
 }
 
 function matchBaseUrl(url) {
+	const a = "api";
 	const baseUrlMap = {
-		"/api/auth": "http://localhost:5002",
-		"/api/board": "http://localhost:5003",
+		[`${a}/auth`]: process.env.SERVER_AUTH_URL,
+		[`${a}/board`]: process.env.SERVER_BOARD_URL,
 	};
 
 	const matched = Object.keys(baseUrlMap).find((key) => url.startsWith(key));
